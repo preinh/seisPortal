@@ -54,9 +54,7 @@ class RootController(BaseController):
     @expose('portal.templates.waveform')
     def waveform(self):
         """Handle the waveform page."""
-        #print "atendi ao events request"
         event_list = model.events.Events().getAll()
-        #print event_list
         return dict(page='waveform', events=event_list)
     
 
@@ -103,7 +101,7 @@ class RootController(BaseController):
         return dict(page='editor stuff')
 
     @expose('portal.templates.login')
-    def login(self, came_from=lurl('/')):
+    def login(self, came_from=url('/')):
         """Start the user login."""
         login_counter = request.environ['repoze.who.logins']
         if login_counter > 0:
@@ -112,7 +110,7 @@ class RootController(BaseController):
                     came_from=came_from)
 
     @expose()
-    def post_login(self, came_from=lurl('/')):
+    def post_login(self, came_from=url('/')):
         """
         Redirect the user to the initially requested page on successful
         authentication or redirect her back to the login page if login failed.
@@ -128,7 +126,7 @@ class RootController(BaseController):
 
 
     @expose()
-    def post_logout(self, came_from=lurl('/')):
+    def post_logout(self, came_from=url('/')):
         """
         Redirect the user to the initially requested page on logout and say
         goodbye as well.
