@@ -27,26 +27,15 @@ class Events(object):
             self.dbDriverName="postgresql"
             self.dbAddress="sysop:sysop@localhost/seiscomp3"
             self.dbPlugin = "dbpostgresql"
-#            self.dbDriverName="mysql"
-#            self.dbAddress="sysop:sysop@localhost/seiscomp3"
-#            self.dbPlugin = "dbmysql"
         else:
             self.dbDriverName="postgresql"
             self.dbAddress="sysop:sysop@10.110.0.130/sc_master"
             self.dbPlugin = "dbpostgresql"
         
-        #self.dbQuery = self._createQuery()        
-        
         daysBefore = 20
         
         self.e = datetime.utcnow()
         self.b = self.e - timedelta(days=daysBefore)
-        
-        #self.e = Core.Time.GMT()
-        #self.s = self.e - Core.TimeSpan(daysBefore*24*60*60)
-        
-#        self.s = Core.Time_FromString("2012-01-01 00:00:00", "%F %T")
-#        self.e = Core.Time_FromString("2012-02-01 00:00:00", "%F %T")
     
         self.events_list = []
 
@@ -121,7 +110,6 @@ class Events(object):
         conn.close()
 
         #return sorted(self.events_list, key=lambda event: event['time'], reverse=True)
-
         return self.events_list
 
 
@@ -153,7 +141,6 @@ class Events(object):
         json=""
         
         try:
-            #print self.events_list
             d = self.events_list[0]
         
             json = """
@@ -193,8 +180,6 @@ class Events(object):
         out = commands.getstatusoutput(cmd)
 
         out_lines = out[1]
-#        out_lines = out_lines.replace("automatic", "<span style='font-color: red;'>automatic</span>")
-#        out_lines = out_lines.replace("manual", "<span color='green'>manual</span>")
     
         out_lines = out_lines.split('\n')
     
@@ -225,51 +210,5 @@ class Events(object):
         return ('<Events: start=%s end=%s>' % str(self.s), str(self.e)).encode('utf-8')
 
     def __unicode__(self):
-        return "Events bla bla"
+        return "Events Model"
 
-
-class EventCatalog:
-    IAG = 1
-    QED = 2
-    ISC = 3
-
-
-class EventFilter(object):
-
-    def __init__(self, 
-                start_time = 0, 
-                end_time = 0,
-        
-                min_mag = 0,
-                max_mag = 10,
-        
-                min_dep = 0,
-                max_dep = 6300,
-        
-                min_lat = -90,
-                max_lat = +90,
-                
-                min_lon = -180,
-                max_lon = +180,
-                
-                catalogs = [EventCatalog.IAG]
-                ):
-        
-        self.start_time = start_time 
-        self.end_time = end_time
-
-        self.min_mag = min_mag
-        self.max_mag = max_mag
-
-        self.min_dep = min_dep
-        self.max_dep = max_dep
-
-        self.min_lat = min_lat
-        self.max_lat = max_lat
-        
-        self.min_lon = min_lon
-        self.max_lon = max_lon
-        
-        self.catalogs = catalogs
-
-        

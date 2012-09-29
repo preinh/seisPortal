@@ -1,27 +1,14 @@
 # -*- coding: utf-8 -*-
-#import os
-#import sys
-
 from portal.lib import app_globals as appg
-
 
 import psycopg2
 #from seiscomp3 import Client, IO, Core, DataModel
 
 class Stations(object):
 
-#    debug = False
-#
     def __init__(self):
         self.details = [] 
         self.stations_list = []
-        #self.getAll()
-#"""
-#scheli capture -I "combined://seisrequest.iag.usp.br:18000;seisrequest.iag.usp.br:18001" 
-#                --offline --amp-range=1E3 --stream BL.AQDB..HHZ -N -o saida.png
-#"""
-
-# scxmldump $D -E iag-usp2012ioiu | scmapcut --ep - -E iag-usp2012ioiu -d 1024x768 -m 5 --layers -o evt.png
 
 
     def getAll(self, filter=""):
@@ -60,8 +47,6 @@ class Stations(object):
                     ORDER BY        net, sta;
                     """ % (filter))
 
-        print filter
-
         for line in cur:
             self.stations_list.append(dict(
                 NN = line[0],
@@ -92,7 +77,6 @@ class Stations(object):
                 json += element + ","
 
         json = "var businesses = [" + json[ : -1] + "];"
-        #print json
         return json
 
 
@@ -175,38 +159,10 @@ class Stations(object):
         return "Stations"
 
 
-class StationFilter(object):
+#"""
+#scheli capture -I "combined://seisrequest.iag.usp.br:18000;seisrequest.iag.usp.br:18001" 
+#                --offline --amp-range=1E3 --stream BL.AQDB..HHZ -N -o saida.png
+#"""
 
-    def __init__(self, 
-                start_time = 0, 
-                end_time = 0,
-        
-                min_mag = 0,
-                max_mag = 10,
-        
-                min_dep = 0,
-                max_dep = 6300,
-        
-                min_lat = -90,
-                max_lat = +90,
-                
-                min_lon = -180,
-                max_lon = +180,
-                
-                ):
-        
-        self.start_time = start_time 
-        self.end_time = end_time
+# scxmldump $D -E iag-usp2012ioiu | scmapcut --ep - -E iag-usp2012ioiu -d 1024x768 -m 5 --layers -o evt.png
 
-        self.min_mag = min_mag
-        self.max_mag = max_mag
-
-        self.min_dep = min_dep
-        self.max_dep = max_dep
-
-        self.min_lat = min_lat
-        self.max_lat = max_lat
-        
-        self.min_lon = min_lon
-        self.max_lon = max_lon
-        

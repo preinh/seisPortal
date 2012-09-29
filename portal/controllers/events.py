@@ -69,8 +69,6 @@ class EventsController(BaseController):
                     elif k == "date_t":
                         e.e = datetime.strptime(v, "%d-%m-%Y %H:%M")
                 
-        print filter, e.b, e.e
-        
         event_list = e.getAll(filter=filter)
         json = e.getAllJson()
         json_l = e.getLastJson()
@@ -95,12 +93,6 @@ class EventsController(BaseController):
         json = e.getAllJson()
         json_l = e.getLastJson()
 
-        print "2 -- events "
-        if kw != {}:
-            print kw['eventfilterform:de']
-            print kw['eventfilterform:ate']
-       
-        
         
         f = EventFilterForm().req()
         return dict(page='events', 
@@ -112,21 +104,13 @@ class EventsController(BaseController):
                     )
 
     @expose('portal.templates.event')
-    def _default(self, came_from=lurl('/'), *args, **kw):
+    def _default(self, came_from=url('/'), *args, **kw):
         id = came_from
         event_details = model.events.Events().getDetails(id)
-        #print event_details
-        f = EventFilterForm().req()
-        
-        print "3 -- default "
-        if kw != {}:
-            print kw['eventfilterform:de']
-            print kw['eventfilterform:ate']
-       
 
+        f = EventFilterForm().req()
         
         return dict(page='event',
                     filterForm=f,
                     d = event_details)
-        #redirect("/events/event&id="+id)
         
