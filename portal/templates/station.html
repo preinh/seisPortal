@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" py:if="False"/>
+
+	<script type="text/javascript" src="/resources/tw2.jquery/static/jquery/1.8.0/jquery.js" ></script>
+	
+	<script type="text/javascript" src="/resources/tw2.jqplugins.ui/static/jquery/ui/1.8.23/js/jquery-ui.js" ></script>
+	<link rel="stylesheet" type="text/css" href="/resources/tw2.jqplugins.ui/static/jquery/ui/1.8.23/css/smoothness/jquery-ui.css" media="all" />
+
+  
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyAnoSK2eAZ-aaXYnvMOaTesb9WyYGra1ik&amp;sensor=false"
+            type="text/javascript"></script>
+    <script type="text/javascript">
+  //<![CDATA[
+    
+
+    function initialize() {
+      if (GBrowserIsCompatible()) {
+        var map = new GMap2(document.getElementById("map_canvas"));
+        map.setCenter(new GLatLng(${d.details[0]['lat']}, ${d.details[0]['lon']}), 10);
+        map.setMapType(G_PHYSICAL_MAP);
+        
+
+        var baseIcon = new GIcon();
+        baseIcon.shadow = null;
+        baseIcon.iconSize = new GSize(12, 12);
+        baseIcon.shadowSize = new GSize(0,0);
+        baseIcon.iconAnchor = new GPoint(6, 6);
+        baseIcon.infoWindowAnchor = new GPoint(9, 2);
+        baseIcon.infoShadowAnchor = new GPoint(18, 25);
+
+        var coldIcon = new GIcon(baseIcon);
+        coldIcon.image = "/images/station.png";
+
+       	var marker = new GMarker(new GLatLng(${d.details[0]['lat']}, ${d.details[0]['lon']}), {icon:coldIcon, title: "${d.details[0]['NN']}.${d.details[0]['SSSSS']}" });
+       	map.addOverlay(marker);
+
+       	map.setUIToDefault();
+       	map.zoomOut();
+       	map.zoomOut();
+       	map.zoomOut();
+       	map.zoomOut();
+        
+      }
+    }
+    
+    //]]>
+    </script>
+
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100%; }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 100% }
+    </style>
+  
+  <title>Station Details</title>
+</head>
+<body onload="initialize()" onunload="GUnload()">
+
+  <div id="getting_started">
+    <h2>Detalhes da Estacao: ${d.details[0]['NN']}.${d.details[0]['SSSSS']} - ${d.details[0]['desc']}</h2>
+	<a href="ftp://trovador.iag.usp.br/brasis/SDS/dataless/all/${d.details[0]['NN']}.${d.details[0]['SSSSS']}.dataless"><b>[Download Dataless]</b></a>
+	<br />
+
+	<script>
+	$(function() {
+		$( "#tabs" ).tabs();
+	});
+	</script>
+
+	<div id="tabs">
+		<ul>
+			<li><a href="#tabs-1">Geral</a></li>
+			<li><a href="#tabs-2">Quality Control</a></li>
+			<li><a href="#tabs-3">Day Plots</a></li>
+		</ul>
+		<div id="tabs-1">
+
+		 	<table width="100%">
+			<tr>
+				<td  valign="top" >
+				    <div id="map_canvas" style="width:100%; height:330px"></div>
+		    	</td>
+				<td width="50%" valign="top" >
+					<img width="100%" src="/images/pic/${d.details[0]['NN']}.${d.details[0]['SSSSS']}.jpg" alt="" />
+		    	</td>
+		    </tr>
+		    </table>
+
+		</div>
+		<div id="tabs-2">
+
+			<table width="100%"><tr>
+		    	<py:for each="c in d.details">
+					<td  width="33%" >
+						<img width="100%" src="${c.png}" alt="" />
+			    	</td>
+			    </py:for>
+			    </tr>
+		    </table>
+
+
+		</div>
+		<div id="tabs-3">
+
+			<table width="100%">
+			    <py:for each="c in d.details">
+					<tr><td >
+						<img width="100%" src="/images/heli/${c.NN}.${c.SSSSS}.${c.LL}.${c.CCC}.png" alt="" />
+			    	</td></tr>
+			    </py:for>
+			</table>
+		</div>
+	</div>
+ 
+  </div>
+  
+
+</body>
+</html>

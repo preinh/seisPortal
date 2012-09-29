@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" py:if="False"/>
+  <title>EventDetails</title>
+
+	<style type="text/css" media="all">
+	
+		#tab_header ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+		
+		#tab_header li {
+			float: left;
+			border: 1px solid;
+			border-bottom-width: 0;
+	/*		margin: 0 0.5em 0 0; */
+		}
+		
+		#tab_header a {
+			display: block;
+			padding: 0 1em;
+		}
+		
+		#tab_header #selected {
+			position: relative;
+			top: 1px;
+			background: white;
+		}
+		
+		#content {
+			border: 1px solid;
+			clear: both;
+		}
+		
+		h1 {
+			margin: 0;
+			padding: 0 0 1em 0;
+		}
+	
+	</style>
+</head>
+<body>
+
+	<h2>Detalhes do Evento: ${d.eid}</h2>
+	
+	<table width="100%"><tr>
+		<td valign="top" align="center" >
+				<img src="/images/evts/${d.eid}.25.png" />
+				<br /><br />
+				<img src="/images/evts/${d.eid}.5.png" />
+				<br /><br />
+				<img src="/images/evts/${d.eid}.1.png" />
+		</td>
+		<td>
+			<py:for each="line in d.t">
+				<tt>${line} </tt>
+				<br />
+			</py:for>
+		</td>
+	</tr>
+	</table>
+	
+<!--   <div class="clearingdiv" />
+
+  <div class="notice">
+  	${d.error}
+  </div>
+
+ -->
+</body>
+</html>
