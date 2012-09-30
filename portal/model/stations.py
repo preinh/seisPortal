@@ -87,9 +87,12 @@ class Stations(object):
             r = dict(error="Invalid ID")
             return r
         try:
-            sid_list = sid.split('.')
-            nn = sid_list[0]
-            ss = sid_list[1]
+            nn = sid.split('.')[-1]
+            ss = (sid.split('.')[-2]).split('/')[-1]
+#            print s1, s2
+#            sid_list = sid.split('.')
+#            nn = sid_list[0]
+#            ss = sid_list[1]
             if not nn or not ss:
                 r = dict(error="Station Not Found",
                          details = [],
