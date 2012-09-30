@@ -19,17 +19,11 @@ from datetime import datetime
 #from eventsForms import EventFilterForm
 import eventsForms as ef
 
-class Event_Page(twc.Page):
-    title = "page"
-    child = ef.EventFilterForm()
-    
+#class Event_Page(twc.Page):
+#    title = "page"
+#    child = ef.EventFilterForm()    
 
 class EventsController(BaseController):
-
-    @expose()
-    def filter(self, **kw):
-        return str(kw)
-
 
     @expose('portal.templates.events')
     def index(self, *args, **kw):
@@ -95,7 +89,7 @@ class EventsController(BaseController):
         json_l = e.getLastJson()
 
         
-        f = EventFilterForm().req()
+        f = ef.EventFilterForm().req()
         return dict(page='events', 
                     filterForm = f,
                     events = event_list,
@@ -111,7 +105,7 @@ class EventsController(BaseController):
         id = came_from
         event_details = model.events.Events().getDetails(id)
 
-        f = EventFilterForm().req()
+        f = ef.EventFilterForm().req()
         
         return dict(page='event',
                     filterForm=f,

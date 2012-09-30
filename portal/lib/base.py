@@ -9,7 +9,7 @@ from tg.i18n import ugettext as _, ungettext
 import portal.model as model
 from tg import url
 import tw2.core.core
-import tw2.jquery
+#import tw2.jquery
 
 __all__ = ['BaseController']
 
