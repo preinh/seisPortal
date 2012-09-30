@@ -170,13 +170,13 @@ class Events(object):
             r = dict(error="Invalid ID")
             return r
 
-        evt = self.dbQuery.getEventByPublicID(eid)
-        if not evt:
-            r = dict(error="Event not Found")
-            return r
+        #evt = self.dbQuery.getEventByPublicID(eid)
+#        if not evt:
+#            r = dict(error="Event not Found")
+#            return r
 
 
-        cmd = "/home/pirchiner/bin/scbulletin -E %s -3 --extra -d '%s://%s'" % (eid, self.dbDriverName, self.dbAddress)
+        cmd = "/usr/local/bin/scbulletin -E %s -3 --extra -d '%s://%s'" % (eid, self.dbDriverName, self.dbAddress)
         out = commands.getstatusoutput(cmd)
 
         out_lines = out[1]

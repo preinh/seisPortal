@@ -37,7 +37,7 @@
         baseIcon.infoShadowAnchor = new GPoint(18, 25);
 
         var coldIcon = new GIcon(baseIcon);
-        coldIcon.image = "/images/station.png";
+        coldIcon.image = "${url('/images')}/station.png";
 
        	var marker = new GMarker(new GLatLng(${d.details[0]['lat']}, ${d.details[0]['lon']}), {icon:coldIcon, title: "${d.details[0]['NN']}.${d.details[0]['SSSSS']}" });
        	map.addOverlay(marker);
@@ -90,7 +90,7 @@
 				    <div id="map_canvas" style="width:100%; height:330px"></div>
 		    	</td>
 				<td width="50%" valign="top" >
-					<img width="100%" src="/images/pic/${d.details[0]['NN']}.${d.details[0]['SSSSS']}.jpg" alt="" />
+					<img width="100%" src="${url('/images')}/pic/${d.details[0]['NN']}.${d.details[0]['SSSSS']}.jpg" alt="" />
 		    	</td>
 		    </tr>
 		    </table>
@@ -101,7 +101,7 @@
 			<table width="100%"><tr>
 		    	<py:for each="c in d.details">
 					<td  width="33%" >
-						<img width="100%" src="${c.png}" alt="" />
+						<img width="100%" src="${url('/images')}/pqlx/${c.png}" alt="" />
 			    	</td>
 			    </py:for>
 			    </tr>
@@ -114,7 +114,7 @@
 			<table width="100%">
 			    <py:for each="c in d.details">
 					<tr><td >
-						<img width="100%" src="/images/heli/${c.NN}.${c.SSSSS}.${c.LL}.${c.CCC}.png" alt="" />
+						<img width="100%" src="${url('/images')}/heli/${c.NN}.${c.SSSSS}.${c.LL}.${c.CCC}.png" alt="" />
 			    	</td></tr>
 			    </py:for>
 			</table>

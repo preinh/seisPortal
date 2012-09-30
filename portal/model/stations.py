@@ -138,7 +138,7 @@ class Stations(object):
                                      lat = ("%.3f") % line[7],
                                      lon = ("%.3f") % line[8],
                                      ele = ("%.1f") % line[9], 
-                                     png = "/images/pqlx/%s.%s/%s"% (line[0], line[1], png ),
+                                     png = "%s.%s/%s"% (line[0], line[1], png),
                                      ))
         
         # Close communication with the database

@@ -179,7 +179,7 @@
 		    baseIcon.infoShadowAnchor = new GPoint(18, 25);
 		
 		    var coldIcon = new GIcon(baseIcon);
-		    coldIcon.image = "/images/event.png";
+		    coldIcon.image = "${evt_png}";
 		
 		  var business = businesses[ind];
 		  var marker = new GMarker(new GLatLng(business.lat, business.lng), {icon:coldIcon, title: business.desc });
@@ -197,8 +197,7 @@
 		    baseIcon.infoShadowAnchor = new GPoint(18, 25);
 		
 		    var coldIcon = new GIcon(baseIcon);
-		    coldIcon.image = "/images/star2.png";
-		
+		    coldIcon.image =  "${last_evt_png}";		
 		  var _last = last[ind];
 		  var marker = new GMarker(new GLatLng(_last.lat, _last.lng), {icon:coldIcon, title: _last.desc });
 		  return marker;
