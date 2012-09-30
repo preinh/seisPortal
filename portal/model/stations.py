@@ -96,7 +96,7 @@ class Stations(object):
                          )
                 return r
         except:
-            r = dict(error="Out of pattern NN.SSSSS " + str(sid) + " " + str(sid_list),
+            r = dict(error="Out of pattern NN.SSSSS " + str(sid),
                      details = [],
                      )
             return r
