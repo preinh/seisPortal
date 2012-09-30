@@ -11,12 +11,12 @@ from itertools import cycle
 __all__ = ['EventsController']
 
 import tw2.core as twc
-import tw2.forms as twf
-import tw2.dynforms as twd
-import tw2.jqplugins.ui as jqui
+#import tw2.forms as twf
+#import tw2.dynforms as twd
+#import tw2.jqplugins.ui as jqui
 from datetime import datetime
 
-from eventsForms import EventFilterForm
+#from eventsForms import EventFilterForm
 import eventsForms as ef
 
 class Event_Page(twc.Page):
