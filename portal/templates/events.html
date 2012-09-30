@@ -285,12 +285,12 @@
 
         <py:for each="evt in events">
 	        <tr style="background-color: ${cls.next()};">
-	            <td style="text-align: center;">${evt.time}</td>
+	            <td style="text-align: center;"><a href="${url('/')}events/${evt.id}">${evt.time}</a></td>
 	            <td style="text-align: center;">${evt.lat}</td>
 	            <td style="text-align: center;">${evt.lon}</td>
 	            <td style="text-align: center;">${evt.dep}</td>
 	            <td style="text-align: center;">${evt.mag}</td>
-	            <td style="text-align: center;"><a href="/events/${evt.id}">${evt.desc}</a></td>
+	            <td style="text-align: center;">${evt.desc}</td>
 	        </tr>
         </py:for>
     </table>

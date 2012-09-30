@@ -77,7 +77,9 @@ class StationsController(BaseController):
                     data = dat,
                     stations = stations_list,
                     cycle = cycle,
-                    json = json)
+                    json = json,
+                    map_symbol = url("/images")+"/station.png",
+                    )
 
 
 
@@ -98,7 +100,9 @@ class StationsController(BaseController):
                     data = {},
                     stations = stations_list,
                     cycle = cycle,
-                    json = json)
+                    json = json,
+                    map_symbol = url("/images")+"/station.png",
+                    )
 
 
     @expose('portal.templates.station')
