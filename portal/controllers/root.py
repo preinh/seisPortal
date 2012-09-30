@@ -118,7 +118,7 @@ class RootController(BaseController):
         """
         if not request.identity:
             login_counter = request.environ['repoze.who.logins'] + 1
-            redirect('/login',
+            redirect(url('/login'),
                 params=dict(came_from=came_from, __logins=login_counter))
         userid = request.identity['repoze.who.userid']
         flash(_('Bem vindo novamente, %s!') % userid)

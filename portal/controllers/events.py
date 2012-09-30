@@ -82,7 +82,9 @@ class EventsController(BaseController):
                     events = event_list,
                     cycle = cycle,
                     json = json,
-                    json_l = json_l
+                    json_l = json_l,
+                    evt_png = url("/images/event.png"),
+                    last_evt_png = url("/images/star2.png"),
                     )
     
     @expose('portal.templates.events')
@@ -100,7 +102,9 @@ class EventsController(BaseController):
                     events = event_list,
                     cycle = cycle,
                     json = json,
-                    json_l = json_l
+                    json_l = json_l,
+                    evt_png = url("/images/event.png"),
+                    last_evt_png = url("/images/star2.png"),
                     )
 
     @expose('portal.templates.event')
