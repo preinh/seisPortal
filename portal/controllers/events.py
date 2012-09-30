@@ -24,7 +24,6 @@ class Event_Page(twc.Page):
     child = ef.EventFilterForm()
     
 
-
 class EventsController(BaseController):
 
     @expose()
