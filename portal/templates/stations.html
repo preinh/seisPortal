@@ -255,7 +255,7 @@
         <py:for each="s in stations">
 	        <tr style="background-color: ${cls.next()}">
 	            <td style="text-align: center;">
-	            	<a href="${url('/')}stations/${s.NN}.${s.SSSSS}" >${s.NN}.${s.SSSSS}.[${s.n_ch}]</a>
+	            	<a href="${url('/stations')}/${s.NN}_${s.SSSSS}" >${s.NN}.${s.SSSSS}.[${s.n_ch}]</a>
 	            </td>
 	            <td>${s.desc}</td>
 	            <td>${s.lat}</td>

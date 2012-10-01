@@ -82,26 +82,16 @@ class Stations(object):
 
     def getDetails(self, sid=None):
         r = {}
-        
-        if not sid:
-            r = dict(error="Invalid ID",
-                     details = [],
-                     )
-            return r
         try:
-            ss = sid.split('.')[-1]
-            nn = (sid.split('.')[-2]).split('/')[-1]
-#            print s1, s2
-#            sid_list = sid.split('.')
-#            nn = sid_list[0]
-#            ss = sid_list[1]
+            ss = sid.split('_')[-1]
+            nn = (sid.split('_')[-2]).split('/')[-1]
             if not nn or not ss:
                 r = dict(error="Station Not Found",
                          details = [],
                          )
                 return r
         except:
-            r = dict(error="Out of pattern NN.SSSSS " + str(sid),
+            r = dict(error="Out of pattern NN_SSSSS " + str(sid),
                      details = [],
                      )
             return r
