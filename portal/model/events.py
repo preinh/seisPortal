@@ -62,18 +62,17 @@ class Events(object):
                         magnitude.m_magnitude_value AS mag, 
                         magnitude.m_type AS mag_type, 
                         magnitude.m_stationcount AS mag_count 
-           FROM         event, 
+           FROM         event LEFT OUTER JOIN publicobject pmagnitude 
+                              ON (event.m_preferredmagnitudeid::text = pmagnitude.m_publicid::text),
                         publicobject pevent, 
                         origin, 
                         publicobject porigin, 
                         magnitude, 
-                        publicobject pmagnitude, 
                         eventdescription
           WHERE         event._oid = pevent._oid 
           AND           origin._oid = porigin._oid 
           AND           magnitude._oid = pmagnitude._oid 
           AND           event.m_preferredoriginid::text = porigin.m_publicid::text 
-          AND           event.m_preferredmagnitudeid::text = pmagnitude.m_publicid::text 
           AND           eventdescription._parent_oid = pevent._oid
           AND           origin.m_time_value >= '%s' 
           AND           origin.m_time_value <= '%s'
@@ -91,7 +90,10 @@ class Events(object):
             val = line[7]
             typ = line[8]
             stc = line[9]
-            _mag = ("%.1f %s (%d)") % (val, typ, stc)
+            try:
+                _mag = ("%.1f %s (%d)") % (val, typ, stc)
+            except:
+                _mag = u"--"
 
             d = dict(id=evt,
                      desc= desc,
