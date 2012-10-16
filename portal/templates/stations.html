@@ -216,18 +216,18 @@
 
 			<div width="100%" >
 
-		    	<div id="map" style="width:100%; height:330px; overflow:hidden;"></div>
+		    	<div id="map" style="width:100%; height:280px; overflow:hidden;"></div>
 
 <!-- 			FALTA: <br />
 				MELHORAR DETALHES !!! <br />
 				filtros para selecionar estacoes<br />
 				link para sismogramas<br />
 				filtro por eventos<br />
- -->
 			</div>  		
   		</td>
   		<td width="50%">
 			<div>
+ -->
 <!-- 
 				FALTA: <br />
 				mapa com estacoes<br/>
@@ -255,7 +255,7 @@
         <py:for each="s in stations">
 	        <tr style="background-color: ${cls.next()}">
 	            <td style="text-align: center;">
-	            	<a href="${url('/')}stations/${s.NN}.${s.SSSSS}" >${s.NN}.${s.SSSSS}.[${s.n_ch}]</a>
+	            	<a href="${url('/stations')}/${s.NN}_${s.SSSSS}" >${s.NN}.${s.SSSSS}.[${s.n_ch}]</a>
 	            </td>
 	            <td>${s.desc}</td>
 	            <td>${s.lat}</td>

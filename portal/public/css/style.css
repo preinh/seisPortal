@@ -57,7 +57,7 @@ ul#mainmenu {
 /* 	background: #f3af4c url('../images/menubg.png') top left no-repeat; */
 	background: #f3af4c;
 	height: 31px;
-/* 	font-weight: bold; */
+ 	font-weight: bold; 
 	font-variant: small-caps;
 }
 
@@ -68,7 +68,7 @@ ul#mainmenu li {
 	position: relative;
 	display: inline;
 	float: left;
-/* 	font-weight: bold; */
+ 	font-weight: bold; 
 }
 
 ul#mainmenu li a {

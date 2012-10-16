@@ -109,6 +109,7 @@ class StationsController(BaseController):
     def _default(self, came_from=url('/')):
         id = came_from
         _s = model.stations.Stations()
+        #_s.getAll();
         station_details = _s.getDetails(id)
 
         return dict(page='station',
