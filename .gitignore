@@ -9,11 +9,11 @@ BL*.png
 *.bak
 
 portal/public/images/pic/outrasCoisas/
-portal/public/images/pic/*.jpg
+#portal/public/images/pic/*.jpg
 
 apache/
 #portal/public/images/pic/
-#portal/public/images/pq/
+portal/public/images/pq/
 proddb.db
 production.ini
 
