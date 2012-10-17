@@ -1,5 +1,16 @@
 
-
+BL*.png
+*.25.png
+*.5.png
+*.1.png
 *.pyc
 .pydevproject
 .settings/*
+*.bak
+
+apache/
+#portal/public/images/pic/
+#portal/public/images/pq/
+proddb.db
+production.ini
+
