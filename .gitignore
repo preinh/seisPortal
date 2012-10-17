@@ -8,7 +8,7 @@ BL*.png
 .settings/*
 *.bak
 
-portal/public/images/pic/outrasCoisas/
+#portal/public/images/pic/outrasCoisas/
 
 apache/
 portal/public/images/pq/
