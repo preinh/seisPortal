@@ -102,8 +102,8 @@ class EventsController(BaseController):
                         b.e = datetime.strptime(v, "%d-%m-%Y %H:%M")
 
 
-        bsb_list = b.getAll(limit=20, filter=bsb_filter)
-        json_l = b.getAllJson(limit=20)
+        bsb_list = b.getAll(limit=60, filter=bsb_filter)
+        json_l = b.getAllJson(limit=60)
 
         bsb_f = bf.BsbFilterForm().req()
 
