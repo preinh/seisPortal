@@ -18,6 +18,7 @@ from datetime import datetime
 
 #from eventsForms import EventFilterForm
 import eventsForms as ef
+import bsbForms as bf
 
 #class Event_Page(twc.Page):
 #    title = "page"
@@ -64,15 +65,55 @@ class EventsController(BaseController):
                 
         event_list = e.getAll(filter=filter)
         json = e.getAllJson()
-        json_l = e.getLastJson()
-
-       
+        #json_l = e.getLastJson()
         f = ef.EventFilterForm().req()
-        
-        return dict(page = 'events', 
+
+        b = model.bsb.BoletimSismico()
+
+        bsb_filter = ""
+        bsb_dat = {}
+        if kw != {}:
+            for k, v in kw.iteritems():
+                bsb_dat[k]=v
+                if v != '':
+                    if k == "bsb_mag_f":
+                        bsb_filter += " AND    m_magnitude_value >= %f  " % (float(v))
+                    elif k == "bsb_mag_t":
+                        bsb_filter += " AND    m_magnitude_value <= %f  " % (float(v))
+
+                    elif k == "bsb_dep_f":
+                        bsb_filter += " AND    m_depth_value >= %f  " % (float(v))
+                    elif k == "bsb_dep_t":
+                        bsb_filter += " AND    m_depth_value <= %f  " % (float(v))
+
+                    elif k == "bsb_lat_f":
+                        bsb_filter += " AND    m_latitude_value <= %f  " % (float(v))
+                    elif k == "bsb_lat_t":
+                        bsb_filter += " AND    m_latitude_value <= %f  " % (float(v))
+
+                    elif k == "bsb_lon_f":
+                        bsb_filter += " AND    m_longitude_value <= %f  " % (float(v))
+                    elif k == "bsb_lon_t":
+                        bsb_filter += " AND    m_longitude_value <= %f  " % (float(v))
+
+                    elif k == "bsb_date_f":
+                        b.b = datetime.strptime(v, "%d-%m-%Y %H:%M")
+                    elif k == "bsb_date_t":
+                        b.e = datetime.strptime(v, "%d-%m-%Y %H:%M")
+
+
+        bsb_list = b.getAll(limit=20, filter=bsb_filter)
+        json_l = b.getAllJson(limit=20)
+
+        bsb_f = bf.BsbFilterForm().req()
+
+        return dict(page = 'events',
                     filterForm = f,
+                    bsbFilterForm = bsb_f,
                     data = dat,
+                    bsb_data = bsb_dat,
                     events = event_list,
+                    bsb = bsb_list,
                     cycle = cycle,
                     json = json,
                     json_l = json_l,
@@ -86,13 +127,20 @@ class EventsController(BaseController):
         e = model.events.Events()
         event_list = e.getAll()
         json = e.getAllJson()
-        json_l = e.getLastJson()
+        #json_l = e.getLastJson()
 
-        
+        b = model.bsb.BoletimSismico()
+        bsb_list = b.getAll()
+        json_l = b.getAllJson()
+
         f = ef.EventFilterForm().req()
-        return dict(page='events', 
+        bsb_f = bf.BsbFilterForm().req()
+
+        return dict(page='events',
                     filterForm = f,
+                    bsbFilterForm = bsb_f,
                     events = event_list,
+                    bsb = bsb_list,
                     cycle = cycle,
                     json = json,
                     json_l = json_l,
@@ -106,8 +154,10 @@ class EventsController(BaseController):
         event_details = model.events.Events().getDetails(id)
 
         f = ef.EventFilterForm().req()
-        
+        bsb_f = bf.BsbFilterForm().req()
+
         return dict(page='event',
                     filterForm=f,
+                    bsbFilterForm= bsb_f,
                     d = event_details)
         

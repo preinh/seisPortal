@@ -62,4 +62,5 @@ def init_model(engine):
 from portal.model.auth import User, Group, Permission
 
 from portal.model.events import Events
+from portal.model.bsb import BoletimSismico
 from portal.model.stations import Stations

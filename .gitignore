@@ -10,6 +10,7 @@ BL*.png
 
 #portal/public/images/pic/outrasCoisas/
 
+.idea/*
 apache/
 portal/public/images/pq/
 proddb.db
