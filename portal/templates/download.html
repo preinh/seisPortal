@@ -8,15 +8,24 @@
 
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" py:if="False"/>
-  <title>Sismogramas</title>
+  <title>Download</title>
 </head>
 
-<body width="100%">
-	<h1>Requisicao de Sismogramas:</h1>
+<body>
+<div style="padding-left: 25px; padding-right: 30px;">
+    <h2>Download:</h2>
+    <br/>
+    <h3>Janela de tempo:</h3>
+    <br/>
+    <table width="100%" style="vertical-align: middle;">
 
-  <div  width="100%" style="height:500px;" id="getting_started">
-	<iframe width="100%" height="100%" style="border-width: 0;" src="http://www.sismo.iag.usp.br/arclink/query" />
-  </div>
-  <div class="clearingdiv" />
+        ${downloadForm.display(value=data)}
+
+    </table>
+    <br/><br/>
+</div>
+
+<div id="output"></div>
+
 </body>
 </html>

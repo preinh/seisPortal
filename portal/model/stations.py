@@ -82,20 +82,19 @@ class Stations(object):
 
     def getDetails(self, sid=None):
         r = {}
-        
-        if not sid:
-            r = dict(error="Invalid ID")
-            return r
         try:
-            sid_list = sid.split('.')
-            nn = sid_list[0]
-            ss = sid_list[1]
+            ss = sid.split('_')[-1]
+            nn = (sid.split('_')[-2]).split('/')[-1]
             if not nn or not ss:
-                r = dict(error="Station Not Found")
+                r = dict(error="Station Not Found",
+                         details = [],
+                         )
                 return r
         except:
-                r = dict(error="Out of pattern NN.SSSSS")
-                return r
+            r = dict(error="Out of pattern NN_SSSSS " + str(sid),
+                     details = [],
+                     )
+            return r
 
         # Connect to an existing database
         conn = psycopg2.connect(dbname="sc_request", user="sysop", password="sysop", host="10.110.0.130")
@@ -146,7 +145,9 @@ class Stations(object):
         conn.close()
 
         if self.details == []:
-            return dict(error="unable to get streams")
+            return dict(error="unable to get streams",
+                        details=[],
+                        )
         
         return dict(error="",
                     details=self.details,

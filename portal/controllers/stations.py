@@ -77,7 +77,9 @@ class StationsController(BaseController):
                     data = dat,
                     stations = stations_list,
                     cycle = cycle,
-                    json = json)
+                    json = json,
+                    map_symbol = url("/images")+"/station.png",
+                    )
 
 
 
@@ -98,13 +100,16 @@ class StationsController(BaseController):
                     data = {},
                     stations = stations_list,
                     cycle = cycle,
-                    json = json)
+                    json = json,
+                    map_symbol = url("/images")+"/station.png",
+                    )
 
 
     @expose('portal.templates.station')
     def _default(self, came_from=url('/')):
         id = came_from
         _s = model.stations.Stations()
+        #_s.getAll();
         station_details = _s.getDetails(id)
 
         return dict(page='station',

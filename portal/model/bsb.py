@@ -8,7 +8,7 @@
 #from sqlalchemy.types import Unicode, Integer, DateTime
 #
 #from portal.model import DeclarativeBase, metadata, DBSession
-
+import sys
 
 import psycopg2
 
@@ -17,7 +17,7 @@ import commands
 
 from datetime import datetime, timedelta
 
-class Events(object):
+class BoletimSismico(object):
 
     debug = False
 
@@ -32,15 +32,15 @@ class Events(object):
             self.dbAddress="sysop:sysop@10.110.0.130/sc_master"
             self.dbPlugin = "dbpostgresql"
         
-        daysBefore = 20
+        before = 3*365*100
         
         self.e = datetime.utcnow()
-        self.b = self.e - timedelta(days=daysBefore)
+        self.b = self.e - timedelta(days=before)
     
         self.events_list = []
 
 
-    def getAll(self, filter=""):
+    def getAll(self, filter="", limit=None):
 
         self.events_list = []
         
@@ -52,39 +52,26 @@ class Events(object):
         
         # Query the database and obtain data as Python objects
         cur.execute("""
-            SELECT      pevent.m_publicid AS eventid, 
-                        eventdescription.m_text AS "desc",
-                        event.m_creationinfo_agencyid AS agency,
-                        origin.m_time_value AS "time", 
-                        origin.m_latitude_value AS lat, 
-                        origin.m_longitude_value AS lon, 
-                        origin.m_depth_value AS depth,
-                        magnitude.m_magnitude_value AS mag, 
-                        magnitude.m_type AS mag_type, 
-                        magnitude.m_stationcount AS mag_count,
-                        case
-                            when origin.m_evaluationmode = 'automatic' then 'A'
-                            when origin.m_evaluationmode = 'manual' then 'M'
-                            else 'U'
-                        end AS status,
-                        origin.m_creationinfo_author as author
-           FROM         event LEFT OUTER JOIN publicobject pmagnitude
-                              ON (event.m_preferredmagnitudeid::text = pmagnitude.m_publicid::text),
-                        publicobject pevent, 
-                        origin, 
-                        publicobject porigin, 
-                        magnitude, 
-                        eventdescription
-          WHERE         event._oid = pevent._oid 
-          AND           origin._oid = porigin._oid 
-          AND           magnitude._oid = pmagnitude._oid 
-          AND           event.m_preferredoriginid::text = porigin.m_publicid::text 
-          AND           eventdescription._parent_oid = pevent._oid
-          AND           origin.m_time_value >= '%s' 
-          AND           origin.m_time_value <= '%s'
-          %s
-          ORDER BY      time DESC;
-          """  % (self.b, self.e, filter))
+            SELECT      m_publicid AS eventid,
+                        m_text AS "desc",
+                        'IAG' AS agency,
+                        m_time_value AS "time",
+                        m_latitude_value AS lat,
+                        m_longitude_value AS lon,
+                        m_depth_value AS depth,
+                        m_magnitude_value AS mag,
+                        m_type AS mag_type,
+                        m_stationcount AS mag_count,
+                        m_evaluationmode AS status,
+                        author
+            FROM        gis_bsb_mv
+            WHERE       m_magnitude_value::numeric >= 4
+            AND         m_time_value <> date '1970-01-01 00:00:00'
+            AND         m_time_value >= '%s'
+            AND         m_time_value <= '%s'
+            %s
+            ORDER BY    time DESC;
+            """  % (self.b, self.e, filter))
 
         for line in cur:
             evt = line[0]
@@ -111,7 +98,7 @@ class Events(object):
                      dep= dep,
                      mag= _mag,
                      status = status,
-                     author = author
+                     author = author,
                      )        
 
             self.events_list.append(d)
@@ -122,7 +109,7 @@ class Events(object):
         conn.close()
 
         #return sorted(self.events_list, key=lambda event: event['time'], reverse=True)
-        return self.events_list
+        return self.events_list[0:limit]
 
 
     def getAllJson(self, limit=None):
@@ -142,9 +129,11 @@ class Events(object):
                         author: '%s',
                     },
                 """ % (d['id'], d['desc'], d['time'], float(str(d['lat'])), float(str(d['lon'])), float(str(d['dep'])), d['mag'], d["status"], d["author"] )
-    
-            json = "var businesses = [" + json[ : -1] + "];"
+
+            json = "var last = [" + json[ : -1] + "];"
         except:
+            print "Unexpected error:", sys.exc_info()[0]
+            json = "var last = [ ];"
             pass
         
         return json
@@ -168,7 +157,7 @@ class Events(object):
                     status: '%s',
                     author: '%s',
                 },
-            """ % (d['id'], d['desc'], d['time'], float(str(d['lat'])), float(str(d['lon'])), float(str(d['dep'])), d['mag'] , d["status"], d["author"])
+            """ % (d['id'], d['desc'], d['time'], float(str(d['lat'])), float(str(d['lon'])), float(str(d['dep'])), d['mag'], d['status'] , d["author"])
     
             json = "var last = [" + json[ : -1] + "];"
         except:
@@ -222,8 +211,8 @@ class Events(object):
 
     
     def __repr__(self):
-        return ('<Events: start=%s end=%s>' % str(self.s), str(self.e)).encode('utf-8')
+        return ('<BoletimSismico: start=%s end=%s>' % str(self.s), str(self.e)).encode('utf-8')
 
     def __unicode__(self):
-        return "Events Model"
+        return "BoletimSismico Model"
 

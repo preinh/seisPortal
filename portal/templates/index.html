@@ -1,59 +1,359 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:py="http://genshi.edgewall.org/"
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
-  <xi:include href="master.html" />
+<xi:include href="master.html"/>
 
 <head>
-  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" py:if="False"/>
-  <title>Sismologia-IAG-USP</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" py:if="False"/>
+    <title>Sismologia-IAG-USP</title>
+
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyAnoSK2eAZ-aaXYnvMOaTesb9WyYGra1ik&amp;sensor=false"
+            type="text/javascript"></script>
+
+    <script type="text/javascript">
+    //<![CDATA[
+
+    ${json}
+
+    ${json_l}
+
+
+    /**
+     * The map object, null until script loads in.
+     * @type {GMap2}
+     */
+    var map = null;
+    var map2 = null;
+
+    /**
+     * The bounds of the markers once loaded in.
+     * @type {GLatLngBounds}
+     */
+    var bounds = null;
+    var bounds2 = null;
+
+    /**
+     * The marker with currently opened info window.
+     * @type {GMarker}
+     */
+    var currentMarker = null;
+    var currentMarker2 = null;
+
+    /**
+     * The dom element that the map is loaded into
+     * @type {Element}
+     */
+    var mapDiv = null;
+    var mapDiv2 = null;
+
+    /**
+     * The dom element that everything is a child of.
+     * @type {Element}
+     */
+    var containerDiv = null;
+    var containerDiv2 = null;
+
+    /**
+     * Position of mouse click (clientX) on map div when in static mode.
+     * @type {Number}
+     */
+    var clickedX = 0;
+    var clickedX2 = 0;
+
+    /**
+     * Position of mouse click (clientY) on map div when in static mode.
+     * @type {Number}
+     */
+    var clickedY = 0;
+    var clickedY2 = 0;
+
+    /**
+     * Called after script is asynchronously loaded in.
+     * Creates the GMap2, GMarker objects and performs actions according to
+     * what the user did to trigger the map load (search, zoom, click etc).
+     */
+    function loadMap() {
+        if (GBrowserIsCompatible()) {
+            mapDiv.style.background = '#fff';
+            mapDiv2.style.background = '#fff';
+
+            mapDiv.style.cursor = '';
+            mapDiv2.style.cursor = '';
+
+            map = new GMap2(mapDiv2, {logoPassive: true});
+            map2 = new GMap2(mapDiv, {logoPassive: true});
+
+            map.setMapType(G_PHYSICAL_MAP);
+            map2.setMapType(G_PHYSICAL_MAP);
+
+
+            bounds = new GLatLngBounds();
+            for (var i = 0; i < businesses.length ; i++) {
+                bounds.extend(new GLatLng(businesses[i].lat, businesses[i].lng));
+            }
+
+            bounds2 = new GLatLngBounds();
+            for (var i = 0; i < last.length ; i++) {
+                bounds2.extend(new GLatLng(last[i].lat, last[i].lng));
+            }
+
+            var latSpan = bounds.toSpan().lat();
+            var latSpan2 = bounds2.toSpan().lat();
+            map.setCenter(bounds.getCenter(), map.getBoundsZoomLevel(bounds));
+            map2.setCenter(bounds2.getCenter(), map2.getBoundsZoomLevel(bounds2));
+
+            // The static map server gives markers more space when calculating
+            // bounds and zoom level, so sometimes the API will give a higher
+            // zoom level than was used by the static map server.
+            // The .98 value is just a guess right now, may need tweaking.
+            var newBounds = map.getBounds();
+            var newLatSpan = newBounds.toSpan().lat();
+            if (latSpan/newLatSpan > .90) { map.zoomOut(); }
+
+            var newBounds2 = map2.getBounds();
+            var newLatSpan2 = newBounds2.toSpan().lat();
+            if (latSpan2/newLatSpan2 > .90) { map2.zoomOut(); }
+
+
+            for (var i = 0; i < businesses.length; i++) {
+                var marker = createMarker(i);
+                map.addOverlay(marker);
+            }
+
+            for (var i = 0; i < last.length; i++) {
+                var _marker2 = createMarkerLast(i);
+                map2.addOverlay(_marker2);
+                // var _marker = createMarkerLast(i);
+                // map.addOverlay(_marker);
+            }
+
+            map.setUIToDefault();
+            map2.setUIToDefault();
+
+            zoomToAll();
+//            map.zoomOut();
+
+           map2.zoomOut();
+//            map2.zoomOut();
+//            map2.zoomOut();
+//            map2.zoomOut();
+//            map2.zoomOut();
+//            map2.zoomOut();
+//            map2.zoomOut();
+//            map2.zoomOut();
+        }
+    }
+
+    /**
+     * Zooms to the viewport that fits all the markers.
+     */
+    function zoomToAll() {
+        map.setCenter(bounds.getCenter(), map.getBoundsZoomLevel(bounds));
+        map2.setCenter(bounds2.getCenter(), map2.getBoundsZoomLevel(bounds2));
+    }
+
+    /**
+     * Creates a marker for the given business.
+     * @param {Number} ind
+     * @return {GMarker}
+     */
+    function createMarker(ind) {
+
+        var baseIcon = new GIcon();
+        baseIcon.shadow = null;
+        baseIcon.iconSize = new GSize(12, 12);
+        baseIcon.shadowSize = new GSize(0,0);
+        baseIcon.iconAnchor = new GPoint(6, 6);
+        baseIcon.infoWindowAnchor = new GPoint(9, 2);
+        baseIcon.infoShadowAnchor = new GPoint(18, 25);
+
+        var coldIcon = new GIcon(baseIcon);
+        coldIcon.image = "${evt_png}";
+
+        var business = businesses[ind];
+        var marker = new GMarker(new GLatLng(business.lat, business.lng), {icon:coldIcon, title: business.desc });
+        return marker;
+    }
+
+    function createMarkerLast(ind) {
+
+        var baseIcon = new GIcon();
+        baseIcon.shadow = null;
+        baseIcon.iconSize = new GSize(15, 15);
+        baseIcon.shadowSize = new GSize(0,0);
+        baseIcon.iconAnchor = new GPoint(6, 6);
+        baseIcon.infoWindowAnchor = new GPoint(9, 2);
+        baseIcon.infoShadowAnchor = new GPoint(18, 25);
+
+        var coldIcon = new GIcon(baseIcon);
+        coldIcon.image =  "${last_evt_png}";
+        var _last = last[ind];
+        var marker = new GMarker(new GLatLng(_last.lat, _last.lng), {icon:coldIcon, title: _last.desc });
+        return marker;
+    }
+
+    /**
+     * Convenience function for creating an element and assigning an id to it.
+     * @param {String} elementType
+     * @param {String} id
+     * @return {Element}
+     */
+    function _cel(elementType, id) {
+        var element = document.createElement(elementType);
+        element.id = id;
+        return element;
+    }
+
+    /**
+     * Sets up the gadget by setting CSS and click events.
+     */
+    function loadMapGadget() {
+        mapDiv = document.getElementById('map');
+        mapDiv2 = document.getElementById('mapLast');
+
+        mapDiv.style.cursor = 'pointer';
+        mapDiv2.style.cursor = 'pointer';
+
+        var urlString = ['http://maps.google.com/staticmap?markers='];
+        var markerString = [];
+        for (var i = 0; i < businesses.length; i++) {
+            markerString.push(businesses[i].lat + ',' + businesses[i].lng + ',red');
+        }
+        urlString.push(markerString.join('|'));
+        urlString.push('&amp;size=300x300');
+        urlString.push('&amp;key=AIzaSyAnoSK2eAZ-aaXYnvMOaTesb9WyYGra1ik');
+        mapDiv.style.background = 'url(\'' + urlString.join('') + '\')';
+
+        var markerString = [];
+        for (var i = 0; i < last.length; i++) {
+            markerString.push(last[i].lat + ',' + last[i].lng + ',red');
+        }
+        urlString.push(markerString.join('|'));
+        urlString.push('&amp;size=300x300');
+        urlString.push('&amp;key=AIzaSyAnoSK2eAZ-aaXYnvMOaTesb9WyYGra1ik');
+        mapDiv2.style.background = 'url(\'' + urlString.join('') + '\')';
+
+        loadMap();
+
+    }
+
+    //]]>
+    </script>
+
+
+
 </head>
 
-<body>
-  <!-- ${sidebar_top()} -->
-  <div id="getting_started">
-    <h2>Laboratorio de Sismologia IAG-USP</h2>
-    <p>Missao:
-    <li>
-    i) Monitorar a atividade sísmica de todo o Brasil com localização
-    de epicentros e determinação de magnitudes em tempo real, 
-    emitindo alertas e boletins para esclarecimento da população, e 
-    fornecimento de dados iniciais às autoridades, defesa civil, e imprensa.
-	</li>
-	<li>
-	ii) Fornecer dados de forma de onda (sismogramas) em tempo real de acesso livre 
-	a qualquer pesquisador brasileiro incentivando a pesquisa científica e 
-	o maior conhecimento da sismicidade do Brasil, do nível de risco sísmico, e 
-	da estrutura da crosta e manto superior.
-	</li>
-	<li>
-	iii) Gerenciar um banco de dados sismológicos do Brasil, 
-	emitindo boletins sísmicos em tempo real com os sismos ocorridos no território brasileiro e 
-	regiões vizinhas, em conjunto com as outras instituições e redes sismológicas do Brasil.
-	</li>
-	</p>
-    <ol id="getting_started_steps">
-      <li class="getting_started">
-        <h3>Boletim Sismico Brasileiro</h3>
-        <p>Informacoes atualizadas sobre os eventos sismicos detectados.</p>
-      </li>
-      <li class="getting_started">
-        <h3>Estacoes Sismograficas</h3>
-        <p>Informacoes sobre a rede de estacoes sismograficas operadas pelo IAG-USP</p>
-      </li>
-      <li class="getting_started">
-        <h3>Sismogramas</h3>
-        <p>Saiba como requisitar sismogramas ao Laboratorio de Sismologia</p>
-      </li>
-    </ol>
-  </div>
-  <div class="clearingdiv" />
-  <div class="notice"> Thank you for choosing TurboGears.
-  </div>
+<body  onload="loadMapGadget();" onunload="GUnload()">
+<!-- ${sidebar_top()} -->
+<div id="getting_started" style="padding-left: 10px; padding-right: 0px;">
+
+    <table width="100%">
+
+        <tr>
+            <td valign="top">
+
+
+                <h2>Laboratório de Sismologia IAG-USP</h2>
+
+                <h3>Estações Sismográficas</h3>
+
+                <table>
+                    <tr>
+                        <td valign="top">
+                        </td>
+                        <td>
+                            <p>
+                                <a href="${tg.url('/stations')}">
+                                    <img style="width: 200px; float: left; padding: 4px;" src="${url('/images')}/stations.jpg" alt=""/>
+                                </a>
+                                <big>
+                                    O Grupo de Sismologia do Instituto de Astronomia, Geofísica e Ciências Atmosféricas
+                                    da USP
+                                    mantem a parte Sul e Sudeste da Rede Sismográfica Integrada do Brasil - BRASIS - em
+                                    conjunto
+                                    com outros experimentos sismológicos temporários, ou experimentos de estudos
+                                    regionais.
+                                    <br/><br/>
+                                    Todos os dados adquiridos nos mais de 20 anos de operações do Laboratório, bem bomo
+                                    parte
+                                    do controle de qualidade se encontra disponível <a href="${tg.url('/stations')}">aqui</a>.
+                                </big>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+                <h3>Sismogramas</h3>
+                <table>
+                    <tr valign="top">
+                        <td>
+                        </td>
+                        <td>
+                            <p>
+                                <a href="${tg.url('/waveform')}">
+                                    <img style="width: 150px;float: left; padding: 4px;" src="${url('/images')}/waveform.jpg" alt=""/>
+                                </a>
+                                <big>
+                                    Em mais de 20 anos de operacoes, o Laboratorio de Sismologia do IAG-USP,
+                                    adquiriu dados sismologicos na maior parte do Brasil,
+                                    prezando enormemente pela qualidade das instalacoes.<br/><br/>
+
+                                    Todos os dados sismologicos sob os cuidados do IAG-USP,
+                                    podem ser solicitados diretamente <a href="${tg.url('/waveform')}">aqui</a>.
+                                </big>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
 
 
 
+                <h3>Boletim Sísmico Brasileiro</h3>
+                <table>
+                    <tr>
+                        <td>
+                            <p>
+                                <a href="${tg.url('/events')}">
+                                    <img style="width: 200px;float: right; padding: 4px;" src="${url('/images')}/sismos.jpg" alt=""/>
+                                </a>
+                                <big>
+                                    Atualmente, o Laboratorio de Sismologia do IAG-USP
+                                    conta com sistemas de detecao automatica de tremores de terra de ultima geracao,
+                                    alem da experiencia de seus analistas, no refinamento e melhoria dos
+                                    resultados automaticos.
+                                    <br/><br/>
+                                    Voce encontra <a href="${tg.url('/events')}">aqui</a> informacoes atualizadas
+                                    continuamente
+                                    sobre os tremores de terra registrados no Brasil, e os maiores da America Latina.
+                                </big>
+                            </p>
+                        </td>
+                        <td valign="top">
+                        </td>
+                    </tr>
+                </table>
+
+
+            </td>
+
+            <td width="40%" valign="top">
+                ${events_bsb()}
+
+                ${events_world()}
+
+            </td>
+
+        </tr>
+    </table>
+
+
+    <br/><br/>
+
+    <div class="clearingdiv"/>
+</div>
 </body>
 </html>

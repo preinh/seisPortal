@@ -51,13 +51,14 @@ a {
 	top: 60px;
 }
 
+
 ul#mainmenu {
 	margin: 0px 10px 0px 10px;
 	padding: 0 0px;
 /* 	background: #f3af4c url('../images/menubg.png') top left no-repeat; */
 	background: #f3af4c;
 	height: 31px;
-/* 	font-weight: bold; */
+ 	font-weight: bold; 
 	font-variant: small-caps;
 }
 
@@ -68,7 +69,7 @@ ul#mainmenu li {
 	position: relative;
 	display: inline;
 	float: left;
-/* 	font-weight: bold; */
+ 	font-weight: bold; 
 }
 
 ul#mainmenu li a {
@@ -232,14 +233,15 @@ form.loginfields input#submit
 
 /* Sidebar */
 .sidebar {
-  border: 1px solid #cce;
-  background-color: #eee;
+    border: none;
+    /*border: 1px solid #cce;*/
+  background-color: #eff7f7;
   margin: 0.5em;
-  margin-left: 1.5em;
+  margin-left: 0.5em;
   padding: 1em;
   float: right;
-  width: 200px;
-  font-size: 88%;
+  width: 330px;
+  font-size: 80%;
 }
 
 .sidebar h2 {
@@ -263,7 +265,7 @@ form.loginfields input#submit
 }
 
 #getting_started {
-  margin-left: 20px;
+  margin-left: 0px;
 }
 
 #getting_started_steps a {
@@ -335,4 +337,8 @@ font-weight:bold;
 }
 div.clearingdiv {
 clear:both;
+}
+
+h2,h3,h1 {
+    color: #286571;
 }

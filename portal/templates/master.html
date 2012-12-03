@@ -6,6 +6,8 @@
       py:strip="">
     <xi:include href="header.html" />
     <xi:include href="sidebars.html" />
+    <xi:include href="events_bsb.html" />
+    <xi:include href="events_world.html" />
     <xi:include href="footer.html" />
 <head py:match="head" py:attrs="select('@*')" profile="http://www.w3.org/2005/10/profile" >
 
@@ -26,16 +28,18 @@
 <body py:match="body" py:attrs="select('@*')">
   ${header()}
   <ul id="mainmenu">
-    <li class="first"><a href="${tg.url('/')}" class="${('', 'active')[defined('page') and page=='index']}">Inicio</a></li>
-        <li><a href="${tg.url('/events')}" class="${('', 'active')[defined('page') and page=='events']}">Sismos</a></li>
-        <li><a href="${tg.url('/stations')}" class="${('', 'active')[defined('page') and page=='stations']}">Estacoes</a></li>
-        <li><a href="${tg.url('/waveform')}" class="${('', 'active')[defined('page') and page=='waveform']}">Sismogramas</a></li>
+    <li class="first"><a href="${tg.url('/')}" class="${('', 'active')[defined('page') and page=='index']}">Início</a></li>
+      <li><a href="${tg.url('/events')}" class="${('', 'active')[defined('page') and page=='events']}">Boletim Sísmico</a></li>
+        <li><a href="${tg.url('/stations')}" class="${('', 'active')[defined('page') and page=='stations']}">Estações</a></li>
+      <li><a href="${tg.url('/waveform')}" class="${('', 'active')[defined('page') and page=='waveform']}">Sismogramas</a></li>
+      <!--<li><a href="${tg.url('/download')}" class="${('', 'active')[defined('page') and page=='download']}">Download</a></li>-->
         <li><a href="${tg.url('/about')}" class="${('', 'active')[defined('page') and page=='about']}">Sobre</a></li>
 <!--         <li><a href="${tg.url('/movie/movie')}" class="${('', 'active')[defined('page') and page=='movie/movie']}">Movie</a></li> -->
 <!--         <li py:if="tg.auth_stack_enabled"><a href="${tg.url('/auth')}" class="${('', 'active')[defined('page') and page=='auth']}">Autenticacion</a></li> -->
 <!--         <li><a href="${tg.url('/environ')}" class="${('', 'active')[defined('page') and page=='environ']}">WSGI Vars</a></li> -->
 <!--         <li><a href="http://groups.google.com/group/turbogears">Contato</a></li> -->
     <py:if test="tg.auth_stack_enabled">
+        <li class="loginlogout" ><a href="http://www.sismo.iag.usp.br/sismologia/">Old Site</a></li>
         <li py:if="not request.identity" id="login" class="loginlogout"><a href="${tg.url('/login')}">Login</a></li>
         <li py:if="request.identity" id="login" class="loginlogout"><a href="${tg.url('/logout_handler')}">Logout</a></li>
         <li py:if="request.identity" id="admin" class="loginlogout"><a href="${tg.url('/admin')}">Admin</a></li>
@@ -53,6 +57,7 @@
     <div py:replace="select('*|text()')"/>
     <!-- End of main_content -->
     ${footer()}
+
   </div>
 </body>
 </html>
