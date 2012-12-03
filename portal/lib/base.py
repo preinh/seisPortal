@@ -33,19 +33,19 @@ class BaseController(TGController):
         request.identity = request.environ.get('repoze.who.identity')
         tmpl_context.identity = request.identity
 
-        return TGController.__call__(self, environ, start_response)
-#        stream = TGController.__call__(self, environ, start_response)
-#         
-#        # Disable the injection of tw2.jquery
-#        #offending_link = tw2.jquery.jquery_js.req().link
-#        local = tw2.core.core.request_local()
-#
-#        res = []
-#        for r in local.get('resources', list()):
-#            #if r.link != offending_link:
-#            r.link = url(r.link)
-#            res.append(r)
-#        
-#        local['resources'] = res    
-#            
-#        return stream
+        #return TGController.__call__(self, environ, start_response)
+        stream = TGController.__call__(self, environ, start_response)
+         
+        # Disable the injection of tw2.jquery
+        #offending_link = tw2.jquery.jquery_js.req().link
+        local = tw2.core.core.request_local()
+
+        res = []
+        for r in local.get('resources', list()):
+            #if r.link != offending_link:
+            r.link = url(r.link)
+            res.append(r)
+        
+        local['resources'] = res    
+            
+        return stream
