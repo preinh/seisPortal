@@ -11,7 +11,7 @@ body {
 	width: 960px;
 	margin: 0 auto;
 	padding: 0;
-	font-size: 12px;
+	font-size: 10px;
 	font-family:"Lucida Grande","Lucida Sans Unicode",geneva,verdana,sans-serif;
 }
 
@@ -241,7 +241,7 @@ form.loginfields input#submit
   padding: 1em;
   float: right;
   width: 330px;
-  font-size: 80%;
+  font-size: 100%;
 }
 
 .sidebar h2 {
