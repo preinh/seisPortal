@@ -25,13 +25,13 @@ body {
 
 
 a {
-	color: #286571;
+	color: #1094ab;
 }
 
 #header {
 	height: 107px;
 	margin: 10px 10px 0 10px;
-	background: url('../images/logo960.png') top center no-repeat;
+	background: url('../images/logo_centrosismologia960.png') top center no-repeat;
 }
 
 #header h1 {
@@ -56,7 +56,7 @@ ul#mainmenu {
 	margin: 0px 10px 0px 10px;
 	padding: 0 0px;
 /* 	background: #f3af4c url('../images/menubg.png') top left no-repeat; */
-	background: #f3af4c;
+	background: #fcb421;
 	height: 31px;
  	font-weight: bold; 
 	font-variant: small-caps;
@@ -87,7 +87,7 @@ ul#mainmenu li a {
 
 ul#mainmenu li a:hover, ul#mainmenu li a.active {
 /* 	background: url('../images/menu-item-actibg.png') left top no-repeat; */
-	background: #00a4ce;
+	background: #1094ab;
 }
 
 ul#mainmenu li.first a {
@@ -95,7 +95,7 @@ ul#mainmenu li.first a {
 }
 
 ul#mainmenu li.first a:hover, ul#mainmenu li.first a.active {
-	background: #00a4ce;
+	background: #1094ab;
 /* 	background: url('../images/menu-item-actibg-first.png') left top no-repeat; */
 }
 
@@ -107,7 +107,7 @@ ul#mainmenu li.loginlogout
 
 ul#mainmenu li.loginlogout a:hover
 {
-	background: #00a4ce;
+	background: #1094ab;
 /*     background: url('../images/menu-item-border.png') left top no-repeat; */
 }
 

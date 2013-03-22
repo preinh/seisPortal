@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+  <link rel="stylesheet" href="js/leaflet.css" />
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" py:if="False"/>
+  <title>Informes</title>
+</head>
+
+<body>
+<div style="padding-left: 25px; padding-right: 30px;">
+    <h2>Últimos Informes:</h2>
+
+    <h3>Relatório sobre a sismicidade recente em Montes Claros, MG:</h3>
+    <a href="${url('/pdf')}/relatorio_MontesClaros.pdf">
+        <img style="border: none;" src="${url('/pdf')}/relatorio_MontesClaros.png" />
+    </a>
+</div>
+
+<div id="output"></div>
+
+
+</body>
+</html>

@@ -111,61 +111,61 @@ class BoletimSismico(object):
         #return sorted(self.events_list, key=lambda event: event['time'], reverse=True)
         return self.events_list[0:limit]
 
-
-    def getAllJson(self, limit=None):
+    def getAllGeoJson(self, limit=None):
         json=""
         try:
             for d in self.events_list[1:limit]:
                 json += """
-                    {
-                        id:     '%s',
-                        desc:   '%s',
-                        time:   '%s',
-                        lat:    %f,
-                        lng:    %f,
-                        dep:    %f,
-                        mag:    '%s',
-                        status: '%s',
-                        author: '%s',
+                 {
+                    "type": "Feature",
+                    "properties": {
+                        "id": '%s',
+                        "mag": '%s',
+                        "desc": "%s",
+                        "time": '%s',
                     },
-                """ % (d['id'], d['desc'], d['time'], float(str(d['lat'])), float(str(d['lon'])), float(str(d['dep'])), d['mag'], d["status"], d["author"] )
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [ %f , %f ],
+                    }
+                },
+                """ % (d['id'], d['mag'], d['desc'], d['time'], float(str(d['lon'])), float(str(d['lat'])))
 
-            json = "var last = [" + json[ : -1] + "];"
+            json = "var geojson_bsb = [" + json[ : -1] + "];"
         except:
             print "Unexpected error:", sys.exc_info()[0]
-            json = "var last = [ ];"
+            json = "var geojson_bsb = [ ];"
             pass
-        
+
         return json
-    
-    
-    def getLastJson(self):
+
+    def getLastGeoJson(self):
         json=""
-        
         try:
             d = self.events_list[0]
-        
             json = """
-                {
-                    id:     '%s',
-                    desc:   '%s',
-                    time:   '%s',
-                    lat:    %f,
-                    lng:    %f,
-                    dep:    %f,
-                    mag:    '%s',
-                    status: '%s',
-                    author: '%s',
+                 {
+                    "type": "Feature",
+                    "properties": {
+                        "id": "%s",
+                        "mag": "%s",
+                        "desc": "%s",
+                        "time": "%s"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [%f, %f]
+                    }
                 },
-            """ % (d['id'], d['desc'], d['time'], float(str(d['lat'])), float(str(d['lon'])), float(str(d['dep'])), d['mag'], d['status'] , d["author"])
-    
-            json = "var last = [" + json[ : -1] + "];"
+                """%(d['id'], d['mag'], d['desc'],d['time'], float(str(d['lon'])), float(str(d['lat'])))
+
+            json = "var geojson_bsb_l = [" + json[ : -1] + "];"
         except:
+            print d['id'],  d['mag'], d['desc'],d['time'], float(str(d['lon'])), float(str(d['lat']))
+            json = "var geojson_bsb_l = [ ];"
             pass
-        
+
         return json
-
-
 
     def getDetails(self, eid=None):
         r = {}

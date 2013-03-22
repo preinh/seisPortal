@@ -64,8 +64,8 @@ class EventsController(BaseController):
                         e.e = datetime.strptime(v, "%d-%m-%Y %H:%M")
                 
         event_list = e.getAll(filter=filter)
-        json = e.getAllJson()
-        #json_l = e.getLastJson()
+        geojson = e.getAllGeoJson()
+        geojson_l = e.getLastGeoJson()
         f = ef.EventFilterForm().req()
 
         b = model.bsb.BoletimSismico()
@@ -103,7 +103,7 @@ class EventsController(BaseController):
 
 
         bsb_list = b.getAll(limit=60, filter=bsb_filter)
-        json_l = b.getAllJson(limit=60)
+        geojson_l = b.getAllGeoJson(limit=60)
 
         bsb_f = bf.BsbFilterForm().req()
 
@@ -115,8 +115,8 @@ class EventsController(BaseController):
                     events = event_list,
                     bsb = bsb_list,
                     cycle = cycle,
-                    json = json,
-                    json_l = json_l,
+                    geojson = geojson,
+                    geojson_l = geojson_l,
                     evt_png = url("/images/event.png"),
                     last_evt_png = url("/images/star2.png"),
                     )
@@ -126,12 +126,13 @@ class EventsController(BaseController):
         """Handle the events page."""
         e = model.events.Events()
         event_list = e.getAll()
-        json = e.getAllJson()
+        geojson = e.getAllGeoJson()
+        #geojson_l = e.getLastGeoJson()
         #json_l = e.getLastJson()
 
         b = model.bsb.BoletimSismico()
         bsb_list = b.getAll()
-        json_l = b.getAllJson()
+        geojson_l = b.getLastGeoJson()
 
         f = ef.EventFilterForm().req()
         bsb_f = bf.BsbFilterForm().req()
@@ -142,8 +143,8 @@ class EventsController(BaseController):
                     events = event_list,
                     bsb = bsb_list,
                     cycle = cycle,
-                    json = json,
-                    json_l = json_l,
+                    geojson = geojson,
+                    geojson_l = geojson_l,
                     evt_png = url("/images/event.png"),
                     last_evt_png = url("/images/star2.png"),
                     )
@@ -160,4 +161,3 @@ class EventsController(BaseController):
                     filterForm=f,
                     bsbFilterForm= bsb_f,
                     d = event_details)
-        

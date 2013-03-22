@@ -20,13 +20,9 @@ import stationsForms as sf
 __all__ = ['StationsController']
 
 
-
 class Station_Page(twc.Page):
     title = "page"
     child = sf.StationFilterForm()
-    
-
-
 
 
 class StationsController(BaseController):
@@ -62,7 +58,6 @@ class StationsController(BaseController):
                         filter += " AND     station.m_longitude <= %f  " % (float(v))
                     elif k == "lon_t":
                         filter += " AND     station.m_longitude <= %f  " % (float(v))
-                
 
         _s = model.stations.Stations()
         

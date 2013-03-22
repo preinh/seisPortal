@@ -67,16 +67,23 @@ class Stations(object):
     def getAllJson(self):
         json = ""                                             
         for sta in self.stations_list:
-                element = """{
-                    NN:       '%s',
-                    SSSSS:    '%s',
-                    desc:     '%s',
-                    lat:       %f, 
-                    lng:       %f
-                    }""" % (sta['NN'], sta['SSSSS'], sta['desc'], float(sta['lat']), float(sta['lon']))
-                json += element + ","
+            element = """
+             {
+                "type": "Feature",
+                "properties": {
+                    "net":    "%s",
+                    "sta":    "%s",
+                    "desc":   "%s"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [%.4f , %.4f ]
+                }
+            }
+            """ % (sta['NN'], sta['SSSSS'], sta['desc'], float(sta['lon']), float(sta['lat']))
+            json += element + ","
 
-        json = "var businesses = [" + json[ : -1] + "];"
+        json = "var stations_gj = [" + json[ : -1] + "];"
         return json
 
 
@@ -134,8 +141,8 @@ class Stations(object):
                                      LL=line[2],
                                      CCC=line[3],
                                      desc = line[6],
-                                     lat = ("%.3f") % line[7],
-                                     lon = ("%.3f") % line[8],
+                                     lat = ("%.4f") % line[7],
+                                     lon = ("%.4f") % line[8],
                                      ele = ("%.1f") % line[9], 
                                      png = "%s.%s/%s"% (line[0], line[1], png),
                                      ))

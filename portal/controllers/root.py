@@ -53,11 +53,11 @@ class RootController(BaseController):
 
         e = model.events.Events()
         event_list = e.getAll()
-        json = e.getAllJson(8)
+        geojson = e.getAllGeoJson(8)
 
         b = model.bsb.BoletimSismico()
         bsb_list = b.getAll()
-        json_l = b.getAllJson(20)
+        geojson_l = b.getAllGeoJson(20)
 
 
         return dict(page='index',
@@ -65,16 +65,14 @@ class RootController(BaseController):
             events = event_list[:8],
             bsb = bsb_list[:20],
             cycle = cycle,
-            json = json,
-            json_l = json_l,
+            geojson = geojson,
+            geojson_l = geojson_l,
             evt_png = url("/images/event.png"),
             last_evt_png = url("/images/event.png"),
         )
 
-        """Handle the front-page."""
-        return dict(page='index')
-
-
+#        """Handle the front-page."""
+#        return dict(page='index')
 
 
 
@@ -85,6 +83,11 @@ class RootController(BaseController):
         return dict(page='waveform', events=event_list)
 
 
+
+    @expose('portal.templates.inform')
+    def inform(self):
+        """Handle the waveform page."""
+        return dict(page='inform')
 
 
     @expose('portal.templates.download')
@@ -120,7 +123,6 @@ class RootController(BaseController):
 
         print dat
 
-
         f = df.DownloadForm().req()
 
         """Handle the waveform page."""
@@ -138,12 +140,9 @@ class RootController(BaseController):
         return dict(page='google')
 
 
-
-
     @expose('portal.templates.about')
     def about(self, *args, **kw):
         return dict(page='about')
-
 
 
     @expose('portal.templates.environ')
@@ -163,7 +162,7 @@ class RootController(BaseController):
         return dict(page='auth')
 
     @expose('portal.templates.index')
-    @require(predicates.has_permission('manage', msg=l_('Permitido apenas para managers')))
+    @require(predicates.has_permission('manage', msg=l_('Permitido apenas para funcionários')))
     def manage_permission_only(self, **kw):
         """Illustrate how a page for managers only works."""
         return dict(page='managers stuff')

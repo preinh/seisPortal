@@ -7,208 +7,35 @@
   <xi:include href="master.html" />
 
 <head>
-	<title>Estacoes Sismograficas</title>
+	<title>Estações Sismográficas</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" py:if="False"/>
 
-	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" py:if="False"/>
-	<style>
-		.message {
-				  font-size: 80%;
-				  padding: 2px;
-				  font-weight: bold;
-				  text-align: center;
-				  width: 100px;
-				  background-color: #ffcc00;
-				  border: 1px solid white;
-				  position: relative;
-				}
-	</style>
+    <link rel="stylesheet" href="${url('/')}js/leaflet.css" />
+    <script src="${url('/')}js/leaflet.js"></script>
 
-    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyAnoSK2eAZ-aaXYnvMOaTesb9WyYGra1ik&amp;sensor=false"
-            type="text/javascript"></script>
+    <!--<link rel="stylesheet" type="text/css"-->
+          <!--href="${url('/resources/tw2.jqplugins.ui/static/jquery/ui/1.8.23/css/smoothness/jquery-ui.css')}" media="all"/>-->
+
+    <!--<script type="text/javascript" src="${url('/resources/tw2.jquery/static/jquery/1.8.0/jquery.js')}"></script>-->
+    <!--<script type="text/javascript"-->
+            <!--src="${url('/resources/tw2.jqplugins.ui/static/jquery/ui/1.8.23/js/jquery-ui.js')}"></script>-->
+
+    <!--<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyAnoSK2eAZ-aaXYnvMOaTesb9WyYGra1ik&amp;sensor=false"-->
+            <!--type="text/javascript"></script>-->
 
 	<script type="text/javascript">
-//<![CDATA[
-
-           
+    //<![CDATA[
 	${json}
-           
-           
-	/**
-	 * The map object, null until script loads in.
-	 * @type {GMap2}
-	 */
-	var map = null;  
-	
-	/**
-	 * The bounds of the markers once loaded in.
-	 * @type {GLatLngBounds}
-	 */
-	var bounds = null;
-	
-	/**
-	 * The marker with currently opened info window.
-	 * @type {GMarker}
-	 */
-	var currentMarker = null;
-	
-	/**
-	 * The dom element that the map is loaded into
-	 * @type {Element}
-	 */
-	var mapDiv = null;
-	
-	/**
-	 * The dom element that everything is a child of.
-	 * @type {Element}
-	 */
-	var containerDiv = null;
-	
-	/**
-	 * Position of mouse click (clientX) on map div when in static mode.
-	 * @type {Number}
-	 */
-	var clickedX = 0;
-	
-	/**
-	 * Position of mouse click (clientY) on map div when in static mode.
-	 * @type {Number}
-	 */
-	var clickedY = 0;
-	
-	/**
-	 * Called after script is asynchronously loaded in.
-	 * Creates the GMap2, GMarker objects and performs actions according to 
-	 * what the user did to trigger the map load (search, zoom, click etc).
-	 */
-	function loadMap() {
-	  if (GBrowserIsCompatible()) {
-	    mapDiv.style.background = '#fff';
-	    mapDiv.style.cursor = '';
-	    map = new GMap2(mapDiv, {logoPassive: true});
-	    
-	    map.setMapType(G_PHYSICAL_MAP);
-	
-	    map.addControl(new GLargeMapControl());
-	    map.addControl(new GScaleControl());
-	    map.addControl(new GMapTypeControl());
-	    map.addControl(new GOverviewMapControl( ));
-	
-	
-	    bounds = new GLatLngBounds();
-	    for (var i = 0; i < businesses.length ; i++) {
-	      bounds.extend(new GLatLng(businesses[i].lat, businesses[i].lng));
-	    }
-	    var latSpan = bounds.toSpan().lat();
-	    map.setCenter(bounds.getCenter(), map.getBoundsZoomLevel(bounds));
-	
-	    // The static map server gives markers more space when calculating
-	    // bounds and zoom level, so sometimes the API will give a higher
-	    // zoom level than was used by the static map server.
-	    // The .98 value is just a guess right now, may need tweaking.
-	    var newBounds = map.getBounds();
-	    var newLatSpan = newBounds.toSpan().lat();
-	    if (latSpan/newLatSpan > .90) { map.zoomOut(); }
-	
-	    for (var i = 0; i < businesses.length; i++) {
-	      var marker = createMarker(i);
-	      map.addOverlay(marker);
-	    }
-
-        map.setUIToDefault();
-
-	    zoomToAll();
-	  }
-	}
-	
-	/**
-	 * Zooms to the viewport that fits all the markers.
-	 */
-	function zoomToAll() {
-	  map.setCenter(bounds.getCenter(), map.getBoundsZoomLevel(bounds));
-	}
-	
-	/**
-	 * Creates a marker for the given business.
-	 * @param {Number} ind
-	 * @return {GMarker}
-	 */
-	function createMarker(ind) {
-	
-	    var baseIcon = new GIcon();
-	    baseIcon.shadow = null;
-	    baseIcon.iconSize = new GSize(12, 12);
-	    baseIcon.shadowSize = new GSize(0,0);
-	    baseIcon.iconAnchor = new GPoint(6, 6);
-	    baseIcon.infoWindowAnchor = new GPoint(9, 2);
-	    baseIcon.infoShadowAnchor = new GPoint(18, 25);
-	
-	    var coldIcon = new GIcon(baseIcon);
-	    coldIcon.image = "${url('/images')}/station.png";
-	
-	  var business = businesses[ind];
-	  var marker = new GMarker(new GLatLng(business.lat, business.lng), {icon:coldIcon, title: business.nome });
-	  GEvent.addListener(marker, 'click', function() {
-	    marker.html = ['<b>', business.nome, '</b><br>', business.descricao, '<br> ', business.projeto];
-	    currentMarker = marker;
-	    marker.openInfoWindowHtml(marker.html);
-	  });
-	  return marker;
-	}
-	
-	/**
-	 * Formats business info into a URL-friendly version for maps url.
-	 * @param {Object} business
-	 * @return {String}
-	 */
-	function formatAddressForMaps(business) {
-	  var address = business.nome + ' ' + business.descricao + ' ' + business.projeto;
-	  return escape(address.replace(' ', '+'));
-	}
-	
-	/**
-	 * Convenience function for creating an element and assigning an id to it.
-	 * @param {String} elementType
-	 * @param {String} id
-	 * @return {Element} 
-	 */
-	function _cel(elementType, id) {
-	  var element = document.createElement(elementType);
-	  element.id = id;
-	  return element;
-	}
-	
-	/**
-	 * Sets up the gadget by setting CSS and click events.
-	 */
-	function loadMapGadget() {
-	  mapDiv = document.getElementById('map');
-	
-	  mapDiv.style.cursor = 'pointer';
-	
-	  var urlString = ['http://maps.google.com/staticmap?markers='];
-	  var markerString = [];
-	  for (var i = 0; i < businesses.length; i++) {
-	    markerString.push(businesses[i].lat + ',' + businesses[i].lng + ',red');
-	  }
-	  urlString.push(markerString.join('|'));
-	  urlString.push('&amp;size=300x300');
-	  urlString.push('&amp;key=AIzaSyAnoSK2eAZ-aaXYnvMOaTesb9WyYGra1ik');
-	  mapDiv.style.background = 'url(\'' + urlString.join('') + '\')';
-	
-	  loadMap();
-	
-	}
 	//]]>
 	</script>
 
 </head>
 
-<body onload="loadMapGadget();" onunload="GUnload()">
-	
+  <!--<body onload="loadMapGadget();" onunload="GUnload()">-->
+  <body>
+
   <div id="getting_started">
-    
-    
-    
+
     <h1>Lista de Estações:</h1>
     		
   	<table width="100%"><tr>
@@ -216,24 +43,64 @@
 
 			<div width="100%" >
 
-		    	<div id="map" style="width:100%; height:280px; overflow:hidden;"></div>
+                <div id="mapS" style="width:100%; height:250px;" ></div>
 
-<!-- 			FALTA: <br />
-				MELHORAR DETALHES !!! <br />
-				filtros para selecionar estacoes<br />
-				link para sismogramas<br />
-				filtro por eventos<br />
-			</div>  		
-  		</td>
-  		<td width="50%">
-			<div>
- -->
-<!-- 
+                <script type="text/javascript">
+                    //<![CDATA[
+
+                    var mapS = L.map('mapS').setView([-15, -50], 3);
+
+                    L.tileLayer('http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png',
+                            {attribution:' / <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>'}
+                    ).addTo(mapS);
+
+                    var stationIcon = L.icon({
+                        iconUrl: "${url('/images')}/station.png",
+                        iconSize:     [10, 10]
+                    });
+
+
+                    function onEachFeature(feature, layer) {
+                        // does this feature have a property named popupContent?
+                        if (feature.properties && feature.properties.desc ) {
+                            p = feature.properties;
+                            msg = p.net + "." + p.sta + " - " + p.desc;
+                            layer.bindPopup(msg);
+                        }
+                    }
+
+                    //    $.getJSON(geojson,
+                    //            function(data){
+                    //            });
+
+                    geojsonLayer = L.geoJson(stations_gj,
+                            {
+                                onEachFeature: onEachFeature,
+                                pointToLayer: function (feature, latlng) {
+                                    return L.marker(latlng, {icon: stationIcon});
+                                }
+                            });
+                    geojsonLayer.addTo(mapS);
+
+                    //]]>
+                </script>
+
+                <!-- 			FALTA: <br />
+                                MELHORAR DETALHES !!! <br />
+                                filtros para selecionar estacoes<br />
+                                link para sismogramas<br />
+                                filtro por eventos<br />
+                            </div>
+                          </td>
+                          <td width="50%">
+                            <div>
+                 -->
+                <!--
 				FALTA: <br />
 				mapa com estacoes<br/>
 				filtro por caixa<br />
 				filtro por distancia<br />
- -->
+                -->
 			</div>  		
   		</td>
   	</tr></table>

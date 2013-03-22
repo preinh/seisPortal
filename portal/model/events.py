@@ -124,56 +124,59 @@ class Events(object):
         #return sorted(self.events_list, key=lambda event: event['time'], reverse=True)
         return self.events_list
 
-
-    def getAllJson(self, limit=None):
-        json=""
+    def getAllGeoJson(self, limit=None):
+        geojson=""
         try:
             for d in self.events_list[1:limit]:
-                json += """
-                    {
-                        id:     '%s',
-                        desc:   '%s',
-                        time:   '%s',
-                        lat:    %f,
-                        lng:    %f,
-                        dep:    %f,
-                        mag:    '%s',
-                        status: '%s',
-                        author: '%s',
+                geojson+= """
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "id": "%s",
+                        "mag": "%s",
+                        "desc": "%s",
+                        "time": "%s"
                     },
-                """ % (d['id'], d['desc'], d['time'], float(str(d['lat'])), float(str(d['lon'])), float(str(d['dep'])), d['mag'], d["status"], d["author"] )
-    
-            json = "var businesses = [" + json[ : -1] + "];"
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [%f, %f]
+                    }
+                }, """%(d['id'],  d['mag'], d['desc'],d['time'], float(str(d['lon'])), float(str(d['lat'])))
+
+            geojson = "var geojson = [" + geojson[ : -1] + "];"
         except:
+            print geojson
             pass
-        
-        return json
-    
-    
-    def getLastJson(self):
+
+        return geojson
+
+
+    def getLastGeoJson(self):
         json=""
-        
         try:
             d = self.events_list[0]
-        
             json = """
                 {
-                    id:     '%s',
-                    desc:   '%s',
-                    time:   '%s',
-                    lat:    %f,
-                    lng:    %f,
-                    dep:    %f,
-                    mag:    '%s',
-                    status: '%s',
-                    author: '%s',
+                    "type": "Feature",
+                    "properties": {
+                        "id": "%s",
+                        "mag": "%s",
+                        "desc": "%s",
+                        "time": "%s"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [%f, %f]
+                    }
                 },
-            """ % (d['id'], d['desc'], d['time'], float(str(d['lat'])), float(str(d['lon'])), float(str(d['dep'])), d['mag'] , d["status"], d["author"])
-    
-            json = "var last = [" + json[ : -1] + "];"
+                """%(d['id'],  d['mag'], d['desc'],d['time'], float(str(d['lon'])), float(str(d['lat'])))
+
+            json = "var geojson_l = [" + json[ : -1] + "];"
         except:
+            json = "var geojson_l = [ ];"
+            print json
             pass
-        
+
         return json
 
 
@@ -203,7 +206,6 @@ class Events(object):
                  t = out_lines,
                  )
         return r
-
 
 #    def _createQuery(self):
 #        # Get global plugin registry

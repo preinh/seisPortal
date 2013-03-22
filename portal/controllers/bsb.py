@@ -60,10 +60,9 @@ class BsbController(BaseController):
                         e.e = datetime.strptime(v, "%d-%m-%Y %H:%M")
                 
         event_list = e.getAll(filter=filter)
-        json = e.getAllJson()
-        json_l = e.getLastJson()
+        geojson = e.getAllGeoJson()
+        geojson_l = e.getLastGeoJson()
 
-       
         f = ''
         
         return dict(page = 'events', 
@@ -71,8 +70,8 @@ class BsbController(BaseController):
                     data = dat,
                     events = event_list,
                     cycle = cycle,
-                    json = json,
-                    json_l = json_l,
+                    geojson = geojson,
+                    geojson_l = geojson_l,
                     evt_png = url("/images/event.png"),
                     last_evt_png = url("/images/star2.png"),
                     )
@@ -82,8 +81,8 @@ class BsbController(BaseController):
         """Handle the events page."""
         e = model.bsb.BoletimSismico()
         event_list = e.getAll()
-        json = e.getAllJson()
-        json_l = e.getLastJson()
+        geojson = e.getAllGeoJson()
+        geojson_l = e.getLastGeoJson()
 
         f = ''
         #f = ef.EventFilterForm().req()
@@ -91,8 +90,8 @@ class BsbController(BaseController):
                     filterForm = f,
                     events = event_list,
                     cycle = cycle,
-                    json = json,
-                    json_l = json_l,
+                    geojson = geojson,
+                    geojson_l = geojson_l,
                     evt_png = url("/images/event.png"),
                     last_evt_png = url("/images/star2.png"),
                     )
