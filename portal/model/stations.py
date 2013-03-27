@@ -2,6 +2,7 @@
 from portal.lib import app_globals as appg
 
 import psycopg2
+from datetime import datetime
 #from seiscomp3 import Client, IO, Core, DataModel
 
 class Stations(object):
@@ -110,28 +111,31 @@ class Stations(object):
         cur = conn.cursor()
         
         # Query the database and obtain data as Python objects
-        cur.execute("""
-                    SELECT          net.m_code as net,
-                                    station.m_code as sta,
-                                    sl.m_code as loc,
-                                    stream.m_code as cha,
-                                    stream.m_start as cha_sta,
-                                    stream.m_end as cha_end,
-                                    station.m_description as desc,
-                                    station.m_latitude as lat,
-                                    station.m_longitude as lon,
-                                    station.m_elevation as elev
-                    FROM            station,
-                                    network as net,
-                                    sensorlocation as sl,
-                                    stream
-                    WHERE           stream._parent_oid = sl._oid
-                    AND             sl._parent_oid = station._oid
-                    AND             station._parent_oid = net._oid
-                    AND             net.m_code = '%s'
-                    AND             station.m_code = '%s'
-                    ORDER BY        station.m_code;
-                    """  % (nn, ss))
+        query = """
+                SELECT          net.m_code as net,
+                                station.m_code as sta,
+                                sl.m_code as loc,
+                                stream.m_code as cha,
+                                stream.m_start as cha_sta,
+                                coalesce(stream.m_end, date_trunc('seconds', now()::timestamp)) as cha_end,
+                                station.m_description as desc,
+                                station.m_latitude as lat,
+                                station.m_longitude as lon,
+                                station.m_elevation as elev
+                FROM            station,
+                                network as net,
+                                sensorlocation as sl,
+                                stream
+                WHERE           stream._parent_oid = sl._oid
+                AND             sl._parent_oid = station._oid
+                AND             station._parent_oid = net._oid
+                AND             net.m_code = '%s'
+                AND             station.m_code = '%s'
+                ORDER BY        station.m_code;
+                """  % (nn, ss)
+
+        print query
+        cur.execute(query)
 
         self.details = []
         for line in cur:
@@ -145,6 +149,8 @@ class Stations(object):
                                      lon = ("%.4f") % line[8],
                                      ele = ("%.1f") % line[9], 
                                      png = "%s.%s/%s"% (line[0], line[1], png),
+                                     t0 = ("%sZ"%(line[4])).replace(" ", "T"),
+                                     tf = ("%sZ"%(line[5])).replace(" ", "T"),
                                      ))
         
         # Close communication with the database

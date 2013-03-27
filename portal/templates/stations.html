@@ -12,16 +12,22 @@
 
     <link rel="stylesheet" href="${url('/')}js/leaflet.css" />
     <script src="${url('/')}js/leaflet.js"></script>
+    <!--<script src="${url('/')}js/d3.min.js"></script>-->
 
+
+    <!--<link rel="stylesheet" type="text/css" href="${url('/')}js/cal-heatmap.css" media="screen" />-->
+    <!--<script src="${url('/')}js/cal-heatmap.min.js"></script>-->
     <!--<link rel="stylesheet" type="text/css"-->
           <!--href="${url('/resources/tw2.jqplugins.ui/static/jquery/ui/1.8.23/css/smoothness/jquery-ui.css')}" media="all"/>-->
 
-    <!--<script type="text/javascript" src="${url('/resources/tw2.jquery/static/jquery/1.8.0/jquery.js')}"></script>-->
     <!--<script type="text/javascript"-->
             <!--src="${url('/resources/tw2.jqplugins.ui/static/jquery/ui/1.8.23/js/jquery-ui.js')}"></script>-->
 
     <!--<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyAnoSK2eAZ-aaXYnvMOaTesb9WyYGra1ik&amp;sensor=false"-->
             <!--type="text/javascript"></script>-->
+
+    <script type="text/javascript" src="${url('/resources/tw2.jquery/static/jquery/1.8.0/jquery.js')}"></script>
+
 
 	<script type="text/javascript">
     //<![CDATA[
@@ -39,11 +45,10 @@
     <h1>Lista de Estações:</h1>
     		
   	<table width="100%"><tr>
-  		<td height="250px">
-
+  		<td height="100%">
 			<div width="100%" >
 
-                <div id="mapS" style="width:100%; height:250px;" ></div>
+                <div id="mapS" style="width: 100%; height:250px;" ></div>
 
                 <script type="text/javascript">
                     //<![CDATA[
@@ -104,8 +109,7 @@
 			</div>  		
   		</td>
   	</tr></table>
-  
-  
+
     <table  py:with="cls=cycle(('#ffffff', '#ccebef'))"  width="100%"  style="text-align: center;" >
 
 			${filterForm.display(value=data)}

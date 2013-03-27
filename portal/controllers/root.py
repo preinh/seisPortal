@@ -22,6 +22,16 @@ from portal.controllers.events import EventsController
 from portal.controllers.stations import StationsController
 from portal.controllers.bsb import BsbController
 
+import urllib2
+from json import loads
+
+
+import psycopg2
+import psycopg2.extras
+import json
+import collections
+from datetime import datetime, timedelta
+import calendar
 
 __all__ = ['RootController']
 
@@ -75,7 +85,6 @@ class RootController(BaseController):
 #        return dict(page='index')
 
 
-
     @expose('portal.templates.waveform')
     def waveform(self):
         """Handle the waveform page."""
@@ -83,12 +92,10 @@ class RootController(BaseController):
         return dict(page='waveform', events=event_list)
 
 
-
     @expose('portal.templates.inform')
     def inform(self):
         """Handle the waveform page."""
         return dict(page='inform')
-
 
     @expose('portal.templates.download')
     def download(self, *args, **kw):
@@ -133,6 +140,163 @@ class RootController(BaseController):
         )
 
 
+    #@expose('portal.templates.data')
+    @expose('json')
+    def getStations(self, **kw):
+        """This method showcases how you can use the same controller for a data page and a display page"""
+        seishub_stations = "http://seishub.iag.usp.br/seismology/station/getList?format=json&network_id=BL"
+        req = urllib2.Request(seishub_stations)
+        opener = urllib2.build_opener()
+        f = opener.open(req)
+        json = loads(f.read())
+        #return dict(params=kw)
+        return dict(stations=dict(args=kw, json=json))
+
+    #@expose('portal.templates.data')
+    @expose('json')
+    def getGaps(self, **kw):
+        #gaps("2010-01-01T00:00:00Z", "2013-12-31T00:00:00Z", 1, "%s"%sta, "HHZ")
+
+        j = None
+        con = None
+
+        try:
+
+            t0 = datetime.strptime(kw["t0"], '%Y-%m-%dT%H:%M:%SZ')
+            tf = datetime.strptime(kw["tf"], '%Y-%m-%dT%H:%M:%SZ')
+            d = int(kw["d"])
+            #delta = timedelta(days=)
+            station = kw["s"]
+            dt = kw["dt"]
+            channel = kw["c"]
+
+            con = psycopg2.connect(host="10.110.0.134", database='seishub', user='seishub', password="seishub")
+
+            cursor = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            query = """
+                select t0, percent
+                from mv_gaps_weekly
+                where sta = '%s'
+                and cha = '%s'
+                and t0 > '%s'
+                and tf < '%s'
+                """%(station, channel,t0, tf)
+            #print query
+            cursor.execute(query)
+
+            #print json.dumps(cursor.fetchall(), default=date_handler)
+
+            rows = cursor.fetchall()
+            l = []
+            for r in rows:
+                l.append([calendar.timegm(r['t0'].timetuple()),r['percent']])
+
+            #print l
+            #print json.dumps(dict(l))
+            j = json.dumps(dict(l))
+            #print l
+            #file = 'month_hour_%s.%s.js'%(station,channel)
+            #f = open(file,'w')
+            #print >> f, j
+
+            con.close()
+
+        except psycopg2.DatabaseError, e:
+            print 'Error %s' % e
+            pass
+
+        finally:
+            if con:
+                con.close()
+
+        #sta = station["code"]
+
+        """This method showcases how you can use the same controller for a data page and a display page"""
+        #seishub_stations = "http://seishub.iag.usp.br/seismology/station/getList?format=json&network_id=BL"
+        #req = urllib2.Request(seishub_stations)
+        #opener = urllib2.build_opener()
+        #f = opener.open(req)
+        #json = loads(f.read())
+        #return dict(params=kw)
+        return dict(gaps=j)
+
+    #@expose('portal.templates.data')
+    @expose('json')
+    def getGapsDaily(self, **kw):
+        #gaps("2010-01-01T00:00:00Z", "2013-12-31T00:00:00Z", 1, "%s"%sta, "HHZ")
+
+        j = None
+        con = None
+
+        try:
+
+            t0 = datetime.strptime(kw["t0"], '%Y-%m-%dT%H:%M:%SZ')
+            tf = datetime.strptime(kw["tf"], '%Y-%m-%dT%H:%M:%SZ')
+            d = int(kw["d"])
+            #delta = timedelta(days=)
+            station = kw["s"]
+            dt = kw["dt"]
+            channel = kw["c"]
+
+            con = psycopg2.connect(host="10.110.0.134", database='seishub', user='seishub', password="seishub")
+
+            cursor = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            query = """
+                select t0, percent
+                from mv_gaps_daily
+                where sta = '%s'
+                and cha = '%s'
+                and t0 > '%s'
+                and tf < '%s'
+                """%(station, channel,t0, tf)
+
+            query = """
+                select t0, percent from get_gaps( '%s', '%s',
+                            '1 day'::interval,
+                            '%s'::text, '%s'::text )
+                """%(t0, tf, station, channel)
+
+            #print query
+            cursor.execute(query)
+
+            #print json.dumps(cursor.fetchall(), default=date_handler)
+
+            rows = cursor.fetchall()
+            l = []
+            for r in rows:
+                l.append([calendar.timegm(r['t0'].timetuple()),r['percent']])
+#                  l.append(dict(date=calendar.timegm(r['t0'].timetuple()),
+#                                gaps = r['percent']))
+            #print l
+            #print json.dumps(dict(l))
+            j = json.dumps(dict(l))
+            #j = json.dumps(l)
+            #print j
+            #file = 'month_hour_%s.%s.js'%(station,channel)
+            #f = open(file,'w')
+            #print >> f, j
+
+            con.close()
+
+        except psycopg2.DatabaseError, e:
+            print 'Error %s' % e
+            pass
+
+        finally:
+            if con:
+                con.close()
+
+        #sta = station["code"]
+
+        """This method showcases how you can use the same controller for a data page and a display page"""
+        #seishub_stations = "http://seishub.iag.usp.br/seismology/station/getList?format=json&network_id=BL"
+        #req = urllib2.Request(seishub_stations)
+        #opener = urllib2.build_opener()
+        #f = opener.open(req)
+        #json = loads(f.read())
+        #return dict(params=kw)
+        return dict(gaps=j)
+
 
     @expose('portal.templates.google')
     def google(self):
@@ -150,11 +314,18 @@ class RootController(BaseController):
         """This method showcases TG's access to the wsgi environment."""
         return dict(environment=request.environ)
 
+
     @expose('portal.templates.data')
     @expose('json')
     def data(self, **kw):
         """This method showcases how you can use the same controller for a data page and a display page"""
-        return dict(params=kw)
+        seishub_stations = "http://seishub.iag.usp.br/seismology/station/getList?format=json&network_id=BL"
+        req = urllib2.Request(seishub_stations)
+        opener = urllib2.build_opener()
+        f = opener.open(req)
+        json = loads(f.read())
+        #return dict(params=kw)
+        return dict(params=dict(args=kw, json=json))
 
     @expose('portal.templates.authentication')
     def auth(self):
@@ -196,7 +367,6 @@ class RootController(BaseController):
         userid = request.identity['repoze.who.userid']
         flash(_('Bem vindo novamente, %s!') % userid)
         redirect(came_from)
-
 
     @expose()
     def post_logout(self, came_from=url('/')):
