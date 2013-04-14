@@ -15,7 +15,7 @@ var AvailabilityM = function() {
     this.piece_length = 12;
     this.piece_rows = 1;
 
-    this.y_start = 1991;
+    this.y_start = 1992;
     this.y_end = 2010;
 
 //    this.date_min;

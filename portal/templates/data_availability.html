@@ -49,17 +49,18 @@
         });
     </script>
 
-    <div id="tabs" style="width: 990px;">
+    <div id="tabs" style="width: 900px;">
         <ul>
-            <li><a href="#2010">A partir de 2010</a></li>
-            <li><a href="#1990">Até 2010</a></li>
+            <li><a href="#a2010">semanal: 2010-2013</a></li>
+            <li><a href="#a1990">mensal: 1992-2010</a></li>
         </ul>
-        <div id="2010">
-
-            <py:for each="c in channels">
+        <div id="a2010">
+            <table width="100%">
+                <tr><td>
+                <py:for each="c in channels">
                 <py:if test="c.show">
                     <py:if test="c.break_loc">
-                        <li>${c.net}.${c.sta}.${c.loc}</li>
+                        ${c.net}.${c.sta}.${c.loc}
                         <div id="${c.net}-${c.sta}-${c.loc}-2010" style="width: 900px;"></div>
                         <script>
                             //<![CDATA[
@@ -80,15 +81,21 @@
                     </py:if>
                 </py:if>
             </py:for>
+            </td></tr>
+            </table>
+
 
         </div>
 
-        <div id="1990">
+        <div id="a1990">
+            <table width="100%">
+                <tr><td>
 
-            <py:for each="c in channels">
+
+                    <py:for each="c in channels">
                 <py:if test="not c.show">
                     <py:if test="c.break_loc">
-                        <li>${c.net}.${c.sta}.${c.loc}</li>
+                        ${c.net}.${c.sta}.${c.loc}
                         <div id="${c.net}-${c.sta}-${c.loc}-1990" style="width: 980px;"></div>
                         <script>
                             //<![CDATA[
@@ -110,6 +117,9 @@
                 </py:if>
 
             </py:for>
+
+                </td></tr>
+            </table>
 
         </div>
 
