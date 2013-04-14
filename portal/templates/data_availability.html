@@ -68,7 +68,7 @@
                             avals2010["${c.net}-${c.sta}-${c.loc}"].init(
                                     {
                                         id: "${c.net}-${c.sta}-${c.loc}-2010",
-                                        data_url: "/getGapsDaily.json?t0=2010-01-01T00:00:00Z&tf=2014-01-01T00:00:00Z&d=1&dt=day&n=${c.net}&s=${c.sta}&&l=${c.loc}",
+                                        data_url: "${url('/')}getGapsDaily.json?t0=2010-01-01T00:00:00Z&tf=2014-01-01T00:00:00Z&d=1&dt=day&n=${c.net}&s=${c.sta}&&l=${c.loc}",
                                         cellsize: 4,
                                         show_headers: false,
                                         date_min: "${c.t0}",
@@ -97,7 +97,7 @@
                             avals1990["${c.net}-${c.sta}-${c.loc}"].init(
                                     {
                                         id: "${c.net}-${c.sta}-${c.loc}-1990",
-                                        data_url: "/getGaps.json?t0=1992-01-01T00:00:00Z&tf=2010-01-01T00:00:00Z&d=1&dt=day&n=${c.net}&s=${c.sta}&&l=${c.loc}",
+                                        data_url: "${url('/')}getGaps.json?t0=1992-01-01T00:00:00Z&tf=2010-01-01T00:00:00Z&d=1&dt=day&n=${c.net}&s=${c.sta}&&l=${c.loc}",
                                         cellsize: 10,
                                         show_headers: false,
                                         date_min: "${c.t0}",
