@@ -564,7 +564,7 @@ class RootController(BaseController):
     @expose('json')
     def data(self, **kw):
         """This method showcases how you can use the same controller for a data page and a display page"""
-        seishub_stations = "http://seishub.iag.usp.br/seismology/station/getList?format=json&network_id=BL"
+        seishub_stations = "http://10.110.0.134/seismology/station/getList?format=json&network_id=BL"
         req = urllib2.Request(seishub_stations)
         opener = urllib2.build_opener()
         f = opener.open(req)
