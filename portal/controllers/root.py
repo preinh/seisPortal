@@ -140,6 +140,227 @@ class RootController(BaseController):
         )
 
 
+
+
+    @expose('portal.templates.data_availability')
+    def data_availability(self, **kw):
+        d = None
+        """return net_station_loc_chan"""
+        try:
+            con = psycopg2.connect(host="10.110.0.134", database='seishub', user='seishub', password="seishub")
+
+            cursor = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            query = """
+                    select network_id, station_id, location_id, channel_id, start_datetime, end_datetime
+                    from "/seismology/station"
+                    group by network_id, station_id, location_id, channel_id, start_datetime, end_datetime
+                    order by network_id, station_id, location_id, channel_id desc, start_datetime, end_datetime
+                    """
+            cursor.execute(query)
+
+            rows = cursor.fetchall()
+            l = []
+            old_sta = None
+            old_loc = None
+            break_sta = False
+            break_loc = False
+            for r in rows:
+
+                if old_sta != r['station_id']:
+                    old_sta = r['station_id']
+                    break_sta = True
+
+                    old_loc = r['location_id']
+                    break_loc = True
+                else:
+                    break_sta = False
+                    if old_loc != r['location_id']:
+                        old_loc = r['location_id']
+                        break_loc = True
+                    else:
+                        break_loc = False
+
+                if r["end_datetime"] == None:
+                    r["end_datetime"] = datetime.now()
+
+                if r["end_datetime"] > datetime.now():
+                    r["end_datetime"] = datetime.now()
+
+                if r["start_datetime"] >= datetime(2010,01,01):
+                    show = True
+                else:
+                    show= False
+
+                l.append(dict(
+                    net=r['network_id'],
+                    sta=r['station_id'],
+                    loc=r['location_id'],
+                    cha=r['channel_id'],
+                    t0=r['start_datetime'],
+                    tf=r['end_datetime'],
+                    break_sta = break_sta,
+                    break_loc = break_loc,
+                    show = show
+                ))
+            d = l
+
+            con.close()
+
+        except psycopg2.DatabaseError, e:
+            print 'Error %s' % e
+            pass
+
+        finally:
+            if con:
+                con.close()
+        return dict(page='data_availability', args=kw, channels=d)
+
+
+    @expose('portal.templates.availability_1990')
+    def availability_1990(self, **kw):
+        d = None
+        """return net_station_loc_chan"""
+        try:
+            con = psycopg2.connect(host="10.110.0.134", database='seishub', user='seishub', password="seishub")
+
+            cursor = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            query = """
+                    select network_id, station_id, location_id, channel_id, start_datetime, end_datetime
+                    from "/seismology/station"
+                    group by network_id, station_id, location_id, channel_id, start_datetime, end_datetime
+                    order by network_id, station_id, location_id, channel_id desc, start_datetime, end_datetime
+                    """
+            cursor.execute(query)
+
+            rows = cursor.fetchall()
+            l = []
+            old_sta = None
+            old_loc = None
+            break_sta = False
+            break_loc = False
+            for r in rows:
+
+                if old_sta != r['station_id']:
+                    old_sta = r['station_id']
+                    break_sta = True
+
+                    old_loc = r['location_id']
+                    break_loc = True
+                else:
+                    break_sta = False
+                    if old_loc != r['location_id']:
+                        old_loc = r['location_id']
+                        break_loc = True
+                    else:
+                        break_loc = False
+
+
+                if r["start_datetime"] < datetime(2010,01,01):
+                    show = True
+                else:
+                    show= False
+
+
+                l.append(dict(
+                    net=r['network_id'],
+                    sta=r['station_id'],
+                    loc=r['location_id'],
+                    cha=r['channel_id'],
+                    t0=r['start_datetime'],
+                    tf=r['end_datetime'],
+                    break_sta = break_sta,
+                    break_loc = break_loc,
+                    show = show
+                ))
+            d = l
+
+            con.close()
+
+        except psycopg2.DatabaseError, e:
+            print 'Error %s' % e
+            pass
+
+        finally:
+            if con:
+                con.close()
+        return dict(page='data_availability', args=kw, channels=d, cycle=cycle)
+
+
+    @expose('portal.templates.availability_2010')
+    def availability_2010(self, **kw):
+        d = None
+        """return net_station_loc_chan"""
+        try:
+            con = psycopg2.connect(host="10.110.0.134", database='seishub', user='seishub', password="seishub")
+
+            cursor = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            query = """
+                    select network_id, station_id, location_id, channel_id, start_datetime, end_datetime
+                    from "/seismology/station"
+                    group by network_id, station_id, location_id, channel_id, start_datetime, end_datetime
+                    order by network_id, station_id, location_id, channel_id desc, start_datetime, end_datetime
+                    """
+            cursor.execute(query)
+
+            rows = cursor.fetchall()
+            l = []
+            old_sta = None
+            old_loc = None
+            break_sta = False
+            break_loc = False
+            for r in rows:
+
+                if old_sta != r['station_id']:
+                    old_sta = r['station_id']
+                    break_sta = True
+
+                    old_loc = r['location_id']
+                    break_loc = True
+                else:
+                    break_sta = False
+                    if old_loc != r['location_id']:
+                        old_loc = r['location_id']
+                        break_loc = True
+                    else:
+                        break_loc = False
+
+                if r["end_datetime"] == None:
+                    r["end_datetime"] = datetime.now()
+
+                if r["end_datetime"] > datetime.now():
+                    r["end_datetime"] = datetime.now()
+
+                if r["end_datetime"] >= datetime(2010,01,01):
+                    show = True
+                else:
+                    show= False
+
+                l.append(dict(
+                    net=r['network_id'],
+                    sta=r['station_id'],
+                    loc=r['location_id'],
+                    cha=r['channel_id'],
+                    t0=r['start_datetime'],
+                    tf=r['end_datetime'],
+                    break_sta = break_sta,
+                    break_loc = break_loc,
+                    show = show
+                ))
+            d = l
+
+            con.close()
+
+        except psycopg2.DatabaseError, e:
+            print 'Error %s' % e
+            pass
+
+        finally:
+            if con:
+                con.close()
+        return dict(page='data_availability', args=kw, channels=d, cycle=cycle)
+
+
+
     #@expose('portal.templates.data')
     @expose('json')
     def getStations(self, **kw):
@@ -166,21 +387,25 @@ class RootController(BaseController):
             tf = datetime.strptime(kw["tf"], '%Y-%m-%dT%H:%M:%SZ')
             d = int(kw["d"])
             #delta = timedelta(days=)
-            station = kw["s"]
+            net = kw["n"]
+            sta = kw["s"]
+            loc = kw["l"]
             dt = kw["dt"]
-            channel = kw["c"]
+            #channel = kw["c"]
 
             con = psycopg2.connect(host="10.110.0.134", database='seishub', user='seishub', password="seishub")
 
             cursor = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
             query = """
-                select t0, percent
-                from mv_gaps_weekly
-                where sta = '%s'
-                and cha = '%s'
+                select t0, avg(percent) "percent"
+                from mv_gaps_monthly
+                where net = '%s'
+                and sta = '%s'
+                and loc = '%s'
                 and t0 > '%s'
                 and tf < '%s'
-                """%(station, channel,t0, tf)
+                group by net, sta, loc, t0
+                """%(net, sta, loc, t0, tf)
             #print query
             cursor.execute(query)
 
@@ -234,27 +459,47 @@ class RootController(BaseController):
             tf = datetime.strptime(kw["tf"], '%Y-%m-%dT%H:%M:%SZ')
             d = int(kw["d"])
             #delta = timedelta(days=)
-            station = kw["s"]
             dt = kw["dt"]
-            channel = kw["c"]
+            net = kw["n"]
+            sta = kw["s"]
+            loc = kw["l"]
+            #channel  = kw["c"]
+
+            if net == "": net = "BL"
 
             con = psycopg2.connect(host="10.110.0.134", database='seishub', user='seishub', password="seishub")
 
             cursor = con.cursor(cursor_factory=psycopg2.extras.DictCursor)
-            query = """
-                select t0, percent
-                from mv_gaps_daily
-                where sta = '%s'
-                and cha = '%s'
-                and t0 > '%s'
-                and tf < '%s'
-                """%(station, channel,t0, tf)
+
+#            query = """
+#                select t0, percent from get_gaps( '%s', '%s',
+#                            '1 day'::interval,
+#                            '%s'::text, '%s'::text )
+#                """%(t0, tf, station, channel)
+#
+#            query = """
+#                select t0, avg(percent) "percent"
+#                from mv_gaps_daily
+#                where net = '%s'
+#                and sta = '%s'
+#                and loc = '%s'
+#                and cha = '%s'
+#                and t0 > '%s'
+#                and tf < '%s'
+#                group by net, sta, loc, t0
+#                """%(network, station, location, channel, t0, tf)
 
             query = """
-                select t0, percent from get_gaps( '%s', '%s',
-                            '1 day'::interval,
-                            '%s'::text, '%s'::text )
-                """%(t0, tf, station, channel)
+                select t0, avg(percent) "percent"
+                from mv_gaps_weekly
+                where net = '%s'
+                and sta = '%s'
+                and loc = '%s'
+                and t0 > '%s'
+                and tf < '%s'
+                group by net, sta, loc, t0
+                """%(net, sta, loc, t0, tf)
+
 
             #print query
             cursor.execute(query)

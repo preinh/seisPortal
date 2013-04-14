@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="master.html"/>
+
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" py:if="False"/>
+<title>Data Availability</title>
+    <link rel="stylesheet" href="${url('/')}js/availability.css" />
+
+    <link rel="stylesheet" type="text/css"
+          href="${url('/resources/tw2.jqplugins.ui/static/jquery/ui/1.8.23/css/smoothness/jquery-ui.css')}" media="all"/>
+
+    <!--<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyAnoSK2eAZ-aaXYnvMOaTesb9WyYGra1ik&amp;sensor=false"-->
+        <!--type="text/javascript"></script>-->
+</head>
+<!--<body onload="loadMapGadget();" onunload="GUnload()">-->
+<body >
+<!--<script type="text/javascript" src="js/jquery.js" ></script>-->
+<script type="text/javascript" src="${url('/resources/tw2.jquery/static/jquery/1.8.0/jquery.js')}"></script>
+<script type="text/javascript"
+        src="${url('/resources/tw2.jqplugins.ui/static/jquery/ui/1.8.23/js/jquery-ui.js')}"></script>
+
+
+<script src="${url('/')}js/d3.min.js"></script>
+<script src="${url('/')}js/availability.js"></script>
+<script src="${url('/')}js/availability_byMonth.js"></script>
+
+<script>
+    //<![CDATA[
+    var avals2010 = {};
+    var avals1990 = {};
+    //]]>
+</script>
+
+
+
+<div id="getting_started">
+
+    <h1>Disponibilidade de Dados:</h1>
+
+
+    <script>
+        $(function () {
+            $("#tabs").tabs();
+        });
+    </script>
+
+    <div id="tabs" style="width: 990px;">
+        <ul>
+            <li><a href="#2010">A partir de 2010</a></li>
+            <li><a href="#1990">Até 2010</a></li>
+        </ul>
+        <div id="2010">
+
+            <py:for each="c in channels">
+                <py:if test="c.show">
+                    <py:if test="c.break_loc">
+                        <li>${c.net}.${c.sta}.${c.loc}</li>
+                        <div id="${c.net}-${c.sta}-${c.loc}-2010" style="width: 900px;"></div>
+                        <script>
+                            //<![CDATA[
+
+                            avals2010["${c.net}-${c.sta}-${c.loc}"] = new Availability();
+                            avals2010["${c.net}-${c.sta}-${c.loc}"].init(
+                                    {
+                                        id: "${c.net}-${c.sta}-${c.loc}-2010",
+                                        data_url: "/getGapsDaily.json?t0=2010-01-01T00:00:00Z&tf=2014-01-01T00:00:00Z&d=1&dt=day&n=${c.net}&s=${c.sta}&&l=${c.loc}",
+                                        cellsize: 4,
+                                        show_headers: false,
+                                        date_min: "${c.t0}",
+                                        date_max: "${c.tf}"
+                                    }
+                            );
+                            //]]>
+                        </script>
+                    </py:if>
+                </py:if>
+            </py:for>
+
+        </div>
+
+        <div id="1990">
+
+            <py:for each="c in channels">
+                <py:if test="not c.show">
+                    <py:if test="c.break_loc">
+                        <li>${c.net}.${c.sta}.${c.loc}</li>
+                        <div id="${c.net}-${c.sta}-${c.loc}-1990" style="width: 980px;"></div>
+                        <script>
+                            //<![CDATA[
+
+                            avals1990["${c.net}-${c.sta}-${c.loc}"] = new AvailabilityM();
+                            avals1990["${c.net}-${c.sta}-${c.loc}"].init(
+                                    {
+                                        id: "${c.net}-${c.sta}-${c.loc}-1990",
+                                        data_url: "/getGaps.json?t0=1992-01-01T00:00:00Z&tf=2010-01-01T00:00:00Z&d=1&dt=day&n=${c.net}&s=${c.sta}&&l=${c.loc}",
+                                        cellsize: 10,
+                                        show_headers: false,
+                                        date_min: "${c.t0}",
+                                        date_max: "${c.tf}"
+                                    }
+                            );
+                            //]]>
+                        </script>
+                    </py:if>
+                </py:if>
+
+            </py:for>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!--
+<div class="clearingdiv" />
+<div class="notice">E nois!!!
+</div>
+-->
+
+</body>
+</html>
