@@ -26,7 +26,7 @@ var AvailabilityM = function() {
 
     var color = d3.scale.quantize()
         .domain([.001, 100])
-        .range(d3.range(1,9).map(function(d) { return "q" + d + "-11"; }));
+        .range(d3.range(1,11).map(function(d) { return "q" + d + "-11"; }));
 
     this.x = d3.scale.linear()
              .domain([0, (this.y_end - this.y_start)])
