@@ -24,8 +24,8 @@ var Availability = function() {
     this.height = this.cellSize * this.piece_rows;
 
     var color = d3.scale.quantize()
-        .domain([.01, 1])
-        .range(d3.range(0,11).map(function(d) { return "q" + d + "-11"; }));
+        .domain([.001, 100])
+        .range(d3.range(1,9).map(function(d) { return "q" + d + "-11"; }));
 
     this.x = d3.scale.linear()
              .domain([0, (this.y_end - this.y_start)])
@@ -44,16 +44,18 @@ var Availability = function() {
         show_headers: false,
 
         date_min: new Date(2011,1,1),
-        date_max: Date.now()
+        date_max: new Date(Date.now())
 };
 
 	var _init = function() {
 
-        self.options.date_min = self.parseDate(self.options.date_min);
-        if (self.options.date_max == "")
-            self.options.date_max = Date.now();
-        else
+       self.options.date_min = self.parseDate(self.options.date_min);
+
+        if (self.options.date_max <= new Date(Date.now()))
             self.options.date_max = self.parseDate(self.options.date_max);
+        else
+            self.options.date_max = new Date(Date.now());
+
 
 
         var svg = d3.select("#" + self.options.id).selectAll("svg")
@@ -79,8 +81,8 @@ var Availability = function() {
             .data(function(d) { return d3.time.weeks(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
             .enter().append("rect")
             .attr("class", function(d) {
-                if ( d > self.options.date_min
-                  && d < self.options.date_max )
+                if ( d >= self.options.date_min
+                  && d <= self.options.date_max )
                     return "active";
                 else
                     return "day";

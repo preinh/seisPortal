@@ -402,8 +402,8 @@ class RootController(BaseController):
                 where net = '%s'
                 and sta = '%s'
                 and loc = '%s'
-                and t0 > '%s'
-                and tf < '%s'
+                and t0 >= '%s'
+                and tf <= '%s'
                 group by net, sta, loc, t0
                 """%(net, sta, loc, t0, tf)
             #print query
@@ -495,8 +495,8 @@ class RootController(BaseController):
                 where net = '%s'
                 and sta = '%s'
                 and loc = '%s'
-                and t0 > '%s'
-                and tf < '%s'
+                and t0 >= '%s'
+                and tf <= '%s'
                 group by net, sta, loc, t0
                 """%(net, sta, loc, t0, tf)
 
