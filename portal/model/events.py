@@ -79,8 +79,9 @@ class Events(object):
           AND           origin._oid = porigin._oid 
           AND           magnitude._oid = pmagnitude._oid 
           AND           event.m_preferredoriginid::text = porigin.m_publicid::text 
+          AND           coalesce(event.m_type, '') not in ('not existing', 'outside of network interest')
           AND           eventdescription._parent_oid = pevent._oid
-          AND           origin.m_time_value >= '%s' 
+          AND           origin.m_time_value >= '%s'
           AND           origin.m_time_value <= '%s'
           %s
           ORDER BY      time DESC;

@@ -65,7 +65,7 @@ class BoletimSismico(object):
                         m_evaluationmode AS status,
                         author
             FROM        gis_bsb_mv
-            WHERE       m_magnitude_value::numeric >= 4
+            WHERE       m_magnitude_value::numeric >= 0
             AND         m_time_value <> date '1970-01-01 00:00:00'
             AND         m_time_value >= '%s'
             AND         m_time_value <= '%s'
