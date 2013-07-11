@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="events_bsb.html" />
+
+
+<!--
+<xi:include href="master.html"/>
+-->
+
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" py:if="False"/>
+    <title>Sismologia-IAG-USP</title>
+
+    <link rel="stylesheet" type="text/css" media="screen" href="${tg.url('/css/style.css')}" />
+    <link rel="stylesheet" type="text/css" media="screen" href="${tg.url('/css/admin.css')}" />
+    <link rel="stylesheet" type="text/css" media="screen" href="${tg.url('/css/portal.css')}" />
+
+    <link rel="stylesheet" href="${url('/')}js/leaflet.css" />
+    <script src="${url('/')}js/leaflet.js"></script>
+
+    <!--<link rel="stylesheet" type="text/css"-->
+          <!--href="${url('/resources/tw2.jqplugins.ui/static/jquery/ui/1.8.23/css/smoothness/jquery-ui.css')}" media="all"/>-->
+
+    <!--<script type="text/javascript" src="${url('/resources/tw2.jquery/static/jquery/1.8.0/jquery.js')}"></script>-->
+    <!--<script type="text/javascript"-->
+            <!--src="${url('/resources/tw2.jqplugins.ui/static/jquery/ui/1.8.23/js/jquery-ui.js')}"></script>-->
+
+    <!--<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyAnoSK2eAZ-aaXYnvMOaTesb9WyYGra1ik&amp;sensor=false"-->
+            <!--type="text/javascript"></script>-->
+
+    <script type="text/javascript">
+    //<![CDATA[
+    ${geojson_bsb}
+    //]]>
+    </script>
+
+</head>
+
+<!--<body  onload="loadMapGadget();" onunload="GUnload()">-->
+<body>
+<!-- ${sidebar_top()} -->
+<div id="getting_started" style="padding-left: 10px; padding-right: 0px;">
+    ${events_bsb()}
+</div>
+</body>
+</html>

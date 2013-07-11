@@ -59,6 +59,8 @@ class RootController(BaseController):
     stations = StationsController()
 
     @expose('portal.templates.index')
+    @expose('portal.templates.m_world')
+    @expose('portal.templates.m_bsb')
     def index(self):
 
         e = model.events.Events()
@@ -622,3 +624,37 @@ class RootController(BaseController):
         """
         flash(_('Esperamos ve-lo novamente em breve!'))
         redirect(came_from)
+
+
+
+    @expose('portal.templates.m_world')
+    def m_world(self):
+
+        e = model.events.Events()
+        event_list = e.getAll()
+        geojson = e.getAllGeoJson(10)
+
+        return dict(page='index',
+            filterForm = "",
+            events = event_list[:10],
+            cycle = cycle,
+            geojson = geojson,
+            evt_png = url("/images/event.png"),
+            last_evt_png = url("/images/event.png"),
+        )
+
+    @expose('portal.templates.m_bsb')
+    def m_bsb(self):
+
+        b = model.bsb.BoletimSismico()
+        bsb_list = b.getAll()
+        geojson_bsb = b.getAllGeoJson(30)
+
+        return dict(page='m_bsb',
+            filterForm = "",
+            bsb = bsb_list[:30],
+            cycle = cycle,
+            geojson_bsb = geojson_bsb,
+            evt_png = url("/images/event.png"),
+            last_evt_png = url("/images/event.png"),
+        )

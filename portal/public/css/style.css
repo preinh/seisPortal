@@ -239,7 +239,7 @@ form.loginfields input#submit
   margin: 0.5em;
   margin-left: 0.5em;
   padding: 1em;
-  float: right;
+  /*float: right;*/
   width: 330px;
   font-size: 100%;
 }
