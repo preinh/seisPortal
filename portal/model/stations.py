@@ -2,6 +2,7 @@
 from portal.lib import app_globals as appg
 
 import psycopg2
+from datetime import datetime
 #from seiscomp3 import Client, IO, Core, DataModel
 
 class Stations(object):
@@ -15,7 +16,7 @@ class Stations(object):
         self.stations_list = []
         
         # Connect to an existing database
-        conn = psycopg2.connect(dbname="sc_request", user="sysop", password="sysop", host="10.110.0.130")
+        conn = psycopg2.connect(dbname="request_sc3", user="sysop", password="sysop", host="10.110.0.130")
         
         # Open a cursor to perform database operations
         cur = conn.cursor()
@@ -67,65 +68,74 @@ class Stations(object):
     def getAllJson(self):
         json = ""                                             
         for sta in self.stations_list:
-                element = """{
-                    NN:       '%s',
-                    SSSSS:    '%s',
-                    desc:     '%s',
-                    lat:       %f, 
-                    lng:       %f
-                    }""" % (sta['NN'], sta['SSSSS'], sta['desc'], float(sta['lat']), float(sta['lon']))
-                json += element + ","
+            element = """
+             {
+                "type": "Feature",
+                "properties": {
+                    "net":    "%s",
+                    "sta":    "%s",
+                    "desc":   "%s"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [%.4f , %.4f ]
+                }
+            }
+            """ % (sta['NN'], sta['SSSSS'], sta['desc'], float(sta['lon']), float(sta['lat']))
+            json += element + ","
 
-        json = "var businesses = [" + json[ : -1] + "];"
+        json = "var stations_gj = [" + json[ : -1] + "];"
         return json
 
 
     def getDetails(self, sid=None):
         r = {}
-        
-        if not sid:
-            r = dict(error="Invalid ID")
-            return r
         try:
-            sid_list = sid.split('.')
-            nn = sid_list[0]
-            ss = sid_list[1]
+            ss = sid.split('_')[-1]
+            nn = (sid.split('_')[-2]).split('/')[-1]
             if not nn or not ss:
-                r = dict(error="Station Not Found")
+                r = dict(error="Station Not Found",
+                         details = [],
+                         )
                 return r
         except:
-                r = dict(error="Out of pattern NN.SSSSS")
-                return r
+            r = dict(error="Out of pattern NN_SSSSS " + str(sid),
+                     details = [],
+                     )
+            return r
 
         # Connect to an existing database
-        conn = psycopg2.connect(dbname="sc_request", user="sysop", password="sysop", host="10.110.0.130")
+        conn = psycopg2.connect(dbname="request_sc3", user="sysop", password="sysop", host="10.110.0.130")
         
         # Open a cursor to perform database operations
         cur = conn.cursor()
         
         # Query the database and obtain data as Python objects
-        cur.execute("""
-                    SELECT          net.m_code as net,
-                                    station.m_code as sta,
-                                    sl.m_code as loc,
-                                    stream.m_code as cha,
-                                    stream.m_start as cha_sta,
-                                    stream.m_end as cha_end,
-                                    station.m_description as desc,
-                                    station.m_latitude as lat,
-                                    station.m_longitude as lon,
-                                    station.m_elevation as elev
-                    FROM            station,
-                                    network as net,
-                                    sensorlocation as sl,
-                                    stream
-                    WHERE           stream._parent_oid = sl._oid
-                    AND             sl._parent_oid = station._oid
-                    AND             station._parent_oid = net._oid
-                    AND             net.m_code = '%s'
-                    AND             station.m_code = '%s'
-                    ORDER BY        station.m_code;
-                    """  % (nn, ss))
+        query = """
+                SELECT          net.m_code as net,
+                                station.m_code as sta,
+                                sl.m_code as loc,
+                                stream.m_code as cha,
+                                stream.m_start as cha_sta,
+                                coalesce(stream.m_end, date_trunc('seconds', now()::timestamp)) as cha_end,
+                                station.m_description as desc,
+                                station.m_latitude as lat,
+                                station.m_longitude as lon,
+                                station.m_elevation as elev
+                FROM            station,
+                                network as net,
+                                sensorlocation as sl,
+                                stream
+                WHERE           stream._parent_oid = sl._oid
+                AND             sl._parent_oid = station._oid
+                AND             station._parent_oid = net._oid
+                AND             net.m_code = '%s'
+                AND             station.m_code = '%s'
+                ORDER BY        station.m_code;
+                """  % (nn, ss)
+
+        print query
+        cur.execute(query)
 
         self.details = []
         for line in cur:
@@ -135,10 +145,12 @@ class Stations(object):
                                      LL=line[2],
                                      CCC=line[3],
                                      desc = line[6],
-                                     lat = ("%.3f") % line[7],
-                                     lon = ("%.3f") % line[8],
+                                     lat = ("%.4f") % line[7],
+                                     lon = ("%.4f") % line[8],
                                      ele = ("%.1f") % line[9], 
-                                     png = "/images/pqlx/%s.%s/%s"% (line[0], line[1], png ),
+                                     png = "%s.%s/%s"% (line[0], line[1], png),
+                                     t0 = ("%sZ"%(line[4])).replace(" ", "T"),
+                                     tf = ("%sZ"%(line[5])).replace(" ", "T"),
                                      ))
         
         # Close communication with the database
@@ -146,7 +158,9 @@ class Stations(object):
         conn.close()
 
         if self.details == []:
-            return dict(error="unable to get streams")
+            return dict(error="unable to get streams",
+                        details=[],
+                        )
         
         return dict(error="",
                     details=self.details,

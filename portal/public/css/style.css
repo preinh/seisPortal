@@ -11,7 +11,7 @@ body {
 	width: 960px;
 	margin: 0 auto;
 	padding: 0;
-	font-size: 12px;
+	font-size: 10px;
 	font-family:"Lucida Grande","Lucida Sans Unicode",geneva,verdana,sans-serif;
 }
 
@@ -25,13 +25,13 @@ body {
 
 
 a {
-	color: #286571;
+	color: #1094ab;
 }
 
 #header {
 	height: 107px;
 	margin: 10px 10px 0 10px;
-	background: url('../images/logo960.png') top center no-repeat;
+	background: url('../images/logo_centrosismologia960.png') top center no-repeat;
 }
 
 #header h1 {
@@ -51,13 +51,14 @@ a {
 	top: 60px;
 }
 
+
 ul#mainmenu {
 	margin: 0px 10px 0px 10px;
 	padding: 0 0px;
 /* 	background: #f3af4c url('../images/menubg.png') top left no-repeat; */
-	background: #f3af4c;
+	background: #fcb421;
 	height: 31px;
-/* 	font-weight: bold; */
+ 	font-weight: bold; 
 	font-variant: small-caps;
 }
 
@@ -68,7 +69,7 @@ ul#mainmenu li {
 	position: relative;
 	display: inline;
 	float: left;
-/* 	font-weight: bold; */
+ 	font-weight: bold; 
 }
 
 ul#mainmenu li a {
@@ -86,7 +87,7 @@ ul#mainmenu li a {
 
 ul#mainmenu li a:hover, ul#mainmenu li a.active {
 /* 	background: url('../images/menu-item-actibg.png') left top no-repeat; */
-	background: #00a4ce;
+	background: #1094ab;
 }
 
 ul#mainmenu li.first a {
@@ -94,7 +95,7 @@ ul#mainmenu li.first a {
 }
 
 ul#mainmenu li.first a:hover, ul#mainmenu li.first a.active {
-	background: #00a4ce;
+	background: #1094ab;
 /* 	background: url('../images/menu-item-actibg-first.png') left top no-repeat; */
 }
 
@@ -106,7 +107,7 @@ ul#mainmenu li.loginlogout
 
 ul#mainmenu li.loginlogout a:hover
 {
-	background: #00a4ce;
+	background: #1094ab;
 /*     background: url('../images/menu-item-border.png') left top no-repeat; */
 }
 
@@ -232,14 +233,15 @@ form.loginfields input#submit
 
 /* Sidebar */
 .sidebar {
-  border: 1px solid #cce;
-  background-color: #eee;
+    border: none;
+    /*border: 1px solid #cce;*/
+  background-color: #eff7f7;
   margin: 0.5em;
-  margin-left: 1.5em;
+  margin-left: 0.5em;
   padding: 1em;
-  float: right;
-  width: 200px;
-  font-size: 88%;
+  /*float: right;*/
+  width: 330px;
+  font-size: 100%;
 }
 
 .sidebar h2 {
@@ -263,7 +265,7 @@ form.loginfields input#submit
 }
 
 #getting_started {
-  margin-left: 20px;
+  margin-left: 0px;
 }
 
 #getting_started_steps a {
@@ -335,4 +337,8 @@ font-weight:bold;
 }
 div.clearingdiv {
 clear:both;
+}
+
+h2,h3,h1 {
+    color: #286571;
 }

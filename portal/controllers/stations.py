@@ -20,13 +20,9 @@ import stationsForms as sf
 __all__ = ['StationsController']
 
 
-
 class Station_Page(twc.Page):
     title = "page"
     child = sf.StationFilterForm()
-    
-
-
 
 
 class StationsController(BaseController):
@@ -62,7 +58,6 @@ class StationsController(BaseController):
                         filter += " AND     station.m_longitude <= %f  " % (float(v))
                     elif k == "lon_t":
                         filter += " AND     station.m_longitude <= %f  " % (float(v))
-                
 
         _s = model.stations.Stations()
         
@@ -77,7 +72,9 @@ class StationsController(BaseController):
                     data = dat,
                     stations = stations_list,
                     cycle = cycle,
-                    json = json)
+                    json = json,
+                    map_symbol = url("/images")+"/station.png",
+                    )
 
 
 
@@ -98,13 +95,16 @@ class StationsController(BaseController):
                     data = {},
                     stations = stations_list,
                     cycle = cycle,
-                    json = json)
+                    json = json,
+                    map_symbol = url("/images")+"/station.png",
+                    )
 
 
     @expose('portal.templates.station')
     def _default(self, came_from=url('/')):
         id = came_from
         _s = model.stations.Stations()
+        #_s.getAll();
         station_details = _s.getDetails(id)
 
         return dict(page='station',

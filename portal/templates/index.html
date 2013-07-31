@@ -1,59 +1,185 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:py="http://genshi.edgewall.org/"
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
-  <xi:include href="master.html" />
+<xi:include href="master.html"/>
 
 <head>
-  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" py:if="False"/>
-  <title>Sismologia-IAG-USP</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" py:if="False"/>
+    <title>Sismologia-IAG-USP</title>
+
+    <link rel="stylesheet" href="${url('/')}js/leaflet.css" />
+    <script src="${url('/')}js/leaflet.js"></script>
+
+    <!--<link rel="stylesheet" type="text/css"-->
+          <!--href="${url('/resources/tw2.jqplugins.ui/static/jquery/ui/1.8.23/css/smoothness/jquery-ui.css')}" media="all"/>-->
+
+    <!--<script type="text/javascript" src="${url('/resources/tw2.jquery/static/jquery/1.8.0/jquery.js')}"></script>-->
+    <!--<script type="text/javascript"-->
+            <!--src="${url('/resources/tw2.jqplugins.ui/static/jquery/ui/1.8.23/js/jquery-ui.js')}"></script>-->
+
+    <!--<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyAnoSK2eAZ-aaXYnvMOaTesb9WyYGra1ik&amp;sensor=false"-->
+            <!--type="text/javascript"></script>-->
+
+    <script type="text/javascript">
+    //<![CDATA[
+    ${geojson}
+    ${geojson_l}
+    //]]>
+    </script>
+
 </head>
 
+<!--<body  onload="loadMapGadget();" onunload="GUnload()">-->
 <body>
-  <!-- ${sidebar_top()} -->
-  <div id="getting_started">
-    <h2>Laboratorio de Sismologia IAG-USP</h2>
-    <p>Missao:
-    <li>
-    i) Monitorar a atividade sísmica de todo o Brasil com localização
-    de epicentros e determinação de magnitudes em tempo real, 
-    emitindo alertas e boletins para esclarecimento da população, e 
-    fornecimento de dados iniciais às autoridades, defesa civil, e imprensa.
-	</li>
-	<li>
-	ii) Fornecer dados de forma de onda (sismogramas) em tempo real de acesso livre 
-	a qualquer pesquisador brasileiro incentivando a pesquisa científica e 
-	o maior conhecimento da sismicidade do Brasil, do nível de risco sísmico, e 
-	da estrutura da crosta e manto superior.
-	</li>
-	<li>
-	iii) Gerenciar um banco de dados sismológicos do Brasil, 
-	emitindo boletins sísmicos em tempo real com os sismos ocorridos no território brasileiro e 
-	regiões vizinhas, em conjunto com as outras instituições e redes sismológicas do Brasil.
-	</li>
-	</p>
-    <ol id="getting_started_steps">
-      <li class="getting_started">
-        <h3>Boletim Sismico Brasileiro</h3>
-        <p>Informacoes atualizadas sobre os eventos sismicos detectados.</p>
-      </li>
-      <li class="getting_started">
-        <h3>Estacoes Sismograficas</h3>
-        <p>Informacoes sobre a rede de estacoes sismograficas operadas pelo IAG-USP</p>
-      </li>
-      <li class="getting_started">
-        <h3>Sismogramas</h3>
-        <p>Saiba como requisitar sismogramas ao Laboratorio de Sismologia</p>
-      </li>
-    </ol>
-  </div>
-  <div class="clearingdiv" />
-  <div class="notice"> Thank you for choosing TurboGears.
-  </div>
+<!-- ${sidebar_top()} -->
+<div id="getting_started" style="padding-left: 10px; padding-right: 0px;">
+
+    <table width="100%">
+        <tr>
+            <td valign="top">
+
+                <h1>Centro de Sismologia (IAG / IEE - USP)</h1>
+
+
+                <table style='background-color:#64c4d0;' cellpadding="0" cellspacing="0">
+                    <tr style="background-color: #fcb421; color:#000000; height: 10px;"><td>
+                        <h2 >&nbsp;Informe: Sismicidade em Montes Claros, MG</h2>
+                    </td></tr>
+                    <tr style="background-color: #1094ab; height: 4px;"><td>
+                        &nbsp;
+                    </td></tr>
+                    <tr>
+                        <!--<td valign="top">-->
+                        <!--</td>-->
+                        <td>
+                            <p>
+                                <a href="${tg.url('/inform')}">
+                                    <img style="width: 200px; float: left; padding: 4px;" src="${url('/')}pdf/relatorio_MontesClaros.png" alt=""/>
+                                </a>
+                                Uma pequena atividade sísmica vem ocorrendo nos últimos anos em Montes Claros.
+                                    O maior tremor até agora, com magnitude 4 na escala Richter, ocorreu em 19/05/2012:
+                                    causou forte vibração, provocou pequenos danos em algumas casas frágeis e assustou a população
+                                    não acostumada a tais fenômenos. Foi instalada uma rede de nove estações sismográficas.
+                                    Os tremores mais fortes ocorrem numa falha geológica de orientação NNW-SSE com mergulho para leste,
+                                    próxima ao Bairro Atlântida. Análises preliminares indicam tratar-se de uma falha inversa cuja movimentação é
+                                    causada por tensões geológicas naturais do tipo compressão de direção aproximadamente E‐W.
+                                    Os tremores têm origem a profundidades entre 1 e 2 km, aproximadamente, ou seja,
+                                    em rochas cristalinas da parte superior da crosta, abaixo da camada de calcário
+                                    (resultado ainda a ser confirmado por estudos mais detalhados).
+                                    Tremores de magnitude 4 ou maior ocorrem, em média, duas vezes por ano no Brasil;
+                                    desta maneira, a atividade sísmica em Montes Claros não é incomum. Não há evidência
+                                    de que a exploração nas pedreiras tenha relação com a atividade sísmica.
+                                    Não é possível prever se a atividade vai continuar diminuindo ou se
+                                    haverá novo surto com algum tremor de magnitude superior a 4.
+                                    O cenário mais provável, é que a atividade diminua gradualmente com alguns tremores ocasionais
+                                    de magnitude perto de 3. A probabilidade de ocorrer outro tremor maior, é estimada em 1%
+                                    (baseado em estatísticas de outros casos no Brasil). Mesmo com probabilidade pequena, recomenda‐se
+                                    reforçar as casas frágeis próximas à área epicentral.
+
+                            </p>
+                        </td>
+                    </tr>
+                </table>
 
 
 
+                <h3>Boletim Sísmico Brasileiro</h3>
+                <table>
+                    <tr>
+                        <td>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                <a href="${tg.url('/events')}">
+                                    <img style="width: 200px;float: right; padding: 4px;" src="${url('/images')}/sismos.jpg" alt=""/>
+                                </a>
+                                <big>
+                                    Atualmente, o Centro de Sismologia da USP
+                                    conta com sistemas de detecção automática de tremores de terra de última geração,
+                                    alem da experiencia de seus analistas, no refinamento e melhoria dos
+                                    resultados automáticos.
+                                    <br/><br/>
+                                    Voce encontra <a href="${tg.url('/events')}">aqui</a> informaçõees atualizadas
+                                    continuamente
+                                    sobre os tremores de terra registrados no Brasil e os maiores da America Latina.
+                                </big>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+
+
+                <h3>Estações Sismográficas</h3>
+
+                <table>
+                    <tr>
+                        <td valign="top">
+                        </td>
+                        <td>
+                            <p>
+                                <a href="${tg.url('/stations')}">
+                                    <img style="width: 200px; float: left; padding: 4px;" src="${url('/images')}/stations.jpg" alt=""/>
+                                </a>
+                                <big>
+                                    O Centro de Sismologia da Universidade de São Paulo, originado pela parceria
+                                    entre o Instiuto de Astronomia, Geofísica e Ciências Atmosféricas (IAG) e o
+                                    Institudo de Eletrotécnica e Energia (IEE),
+                                    mantem a parte Sul e Sudeste da Rede Sismográfica Integrada do Brasil - BRASIS - em
+                                    conjunto com outros experimentos sismológicos temporários, ou experimentos de estudos
+                                    regionais.
+                                    <br/><br/>
+                                    Todos os dados adquiridos nas operações do Centro, bem bomo
+                                    parte do controle de qualidade se encontra disponível <a href="${tg.url('/stations')}">aqui</a>.
+                                </big>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+                <h3>Sismogramas</h3>
+                <table>
+                    <tr valign="top">
+                        <td>
+                        </td>
+                        <td>
+                            <p>
+                                <a href="${tg.url('/waveform')}">
+                                    <img style="width: 150px;float: right; padding: 4px;" src="${url('/images')}/waveform.jpg" alt=""/>
+                                </a>
+                                <big>
+                                    O Centro de Sismologia da USP,
+                                    adquiriu dados sismologicos na maior parte do Brasil,
+                                    prezando enormemente pela qualidade das instalacoes.<br/><br/>
+
+                                    Todos os dados sismológicos sob os cuidados do Centro de Sismologia da USP,
+                                    podem ser solicitados diretamente <a href="${tg.url('/waveform')}">aqui</a>.
+                                </big>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+
+            </td>
+
+            <td width="40%" valign="top">
+                ${events_bsb()}
+
+                ${events_world()}
+
+            </td>
+
+        </tr>
+    </table>
+
+
+    <br/><br/>
+
+    <div class="clearingdiv"/>
+</div>
 </body>
 </html>

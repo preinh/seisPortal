@@ -29,7 +29,7 @@ class Events(object):
             self.dbPlugin = "dbpostgresql"
         else:
             self.dbDriverName="postgresql"
-            self.dbAddress="sysop:sysop@10.110.0.130/sc_master"
+            self.dbAddress="sysop:sysop@10.110.0.130/master_sc3"
             self.dbPlugin = "dbpostgresql"
         
         daysBefore = 20
@@ -45,7 +45,7 @@ class Events(object):
         self.events_list = []
         
         # Connect to an existing database
-        conn = psycopg2.connect(dbname="sc_master", user="sysop", password="sysop", host="10.110.0.130")
+        conn = psycopg2.connect(dbname="master_sc3", user="sysop", password="sysop", host="10.110.0.130")
         
         # Open a cursor to perform database operations
         cur = conn.cursor()
@@ -53,7 +53,7 @@ class Events(object):
         # Query the database and obtain data as Python objects
         cur.execute("""
             SELECT      pevent.m_publicid AS eventid, 
-                        eventdescription.m_text AS "desc", 
+                        eventdescription.m_text AS "desc",
                         event.m_creationinfo_agencyid AS agency,
                         origin.m_time_value AS "time", 
                         origin.m_latitude_value AS lat, 
@@ -61,21 +61,27 @@ class Events(object):
                         origin.m_depth_value AS depth,
                         magnitude.m_magnitude_value AS mag, 
                         magnitude.m_type AS mag_type, 
-                        magnitude.m_stationcount AS mag_count 
-           FROM         event, 
+                        coalesce(magnitude.m_stationcount, 0) AS mag_count,
+                        case
+                            when origin.m_evaluationmode = 'automatic' then 'A'
+                            when origin.m_evaluationmode = 'manual' then 'M'
+                            else 'U'
+                        end AS status,
+                        origin.m_creationinfo_author as author
+           FROM         event LEFT OUTER JOIN publicobject pmagnitude
+                              ON (event.m_preferredmagnitudeid::text = pmagnitude.m_publicid::text),
                         publicobject pevent, 
                         origin, 
                         publicobject porigin, 
                         magnitude, 
-                        publicobject pmagnitude, 
                         eventdescription
           WHERE         event._oid = pevent._oid 
           AND           origin._oid = porigin._oid 
           AND           magnitude._oid = pmagnitude._oid 
           AND           event.m_preferredoriginid::text = porigin.m_publicid::text 
-          AND           event.m_preferredmagnitudeid::text = pmagnitude.m_publicid::text 
+          AND           coalesce(event.m_type, '') not in ('not existing', 'outside of network interest')
           AND           eventdescription._parent_oid = pevent._oid
-          AND           origin.m_time_value >= '%s' 
+          AND           origin.m_time_value >= '%s'
           AND           origin.m_time_value <= '%s'
           %s
           ORDER BY      time DESC;
@@ -91,7 +97,12 @@ class Events(object):
             val = line[7]
             typ = line[8]
             stc = line[9]
-            _mag = ("%.1f %s (%d)") % (val, typ, stc)
+            status = line[10]
+            author = line[11]
+            try:
+                _mag = ("%.1f %s (%d)") % (val, typ, stc)
+            except:
+                _mag = u"--"
 
             d = dict(id=evt,
                      desc= desc,
@@ -99,7 +110,9 @@ class Events(object):
                      lat= lat, 
                      lon= lon,
                      dep= dep,
-                     mag= _mag
+                     mag= _mag,
+                     status = status,
+                     author = author
                      )        
 
             self.events_list.append(d)
@@ -112,53 +125,59 @@ class Events(object):
         #return sorted(self.events_list, key=lambda event: event['time'], reverse=True)
         return self.events_list
 
-
-    def getAllJson(self):
-        json=""
+    def getAllGeoJson(self, limit=None):
+        geojson=""
         try:
-            
-            for d in self.events_list[1:]:
-                json += """
-                    {
-                        id:     '%s',
-                        desc:   '%s',
-                        time:   '%s',
-                        lat:    %f,
-                        lng:    %f,
-                        dep:    %f,
-                        mag:    '%s'
+            for d in self.events_list[1:limit]:
+                geojson+= """
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "id": "%s",
+                        "mag": "%s",
+                        "desc": "%s",
+                        "time": "%s"
                     },
-                """ % (d['id'], d['desc'], d['time'], float(str(d['lat'])), float(str(d['lon'])), float(str(d['dep'])), d['mag'] )
-    
-            json = "var businesses = [" + json[ : -1] + "];"
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [%f, %f]
+                    }
+                }, """%(d['id'],  d['mag'], d['desc'],d['time'], float(str(d['lon'])), float(str(d['lat'])))
+
+            geojson = "var geojson = [" + geojson[ : -1] + "];"
         except:
+            print geojson
             pass
-        
-        return json
-    
-    
-    def getLastJson(self):
+
+        return geojson
+
+
+    def getLastGeoJson(self):
         json=""
-        
         try:
             d = self.events_list[0]
-        
             json = """
                 {
-                    id:     '%s',
-                    desc:   '%s',
-                    time:   '%s',
-                    lat:    %f,
-                    lng:    %f,
-                    dep:    %f,
-                    mag:    '%s'
+                    "type": "Feature",
+                    "properties": {
+                        "id": "%s",
+                        "mag": "%s",
+                        "desc": "%s",
+                        "time": "%s"
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [%f, %f]
+                    }
                 },
-            """ % (d['id'], d['desc'], d['time'], float(str(d['lat'])), float(str(d['lon'])), float(str(d['dep'])), d['mag'] )
-    
-            json = "var last = [" + json[ : -1] + "];"
+                """%(d['id'],  d['mag'], d['desc'],d['time'], float(str(d['lon'])), float(str(d['lat'])))
+
+            json = "var geojson_l = [" + json[ : -1] + "];"
         except:
+            json = "var geojson_l = [ ];"
+            print json
             pass
-        
+
         return json
 
 
@@ -170,13 +189,13 @@ class Events(object):
             r = dict(error="Invalid ID")
             return r
 
-        evt = self.dbQuery.getEventByPublicID(eid)
-        if not evt:
-            r = dict(error="Event not Found")
-            return r
+        #evt = self.dbQuery.getEventByPublicID(eid)
+#        if not evt:
+#            r = dict(error="Event not Found")
+#            return r
 
 
-        cmd = "/home/pirchiner/bin/scbulletin -E %s -3 --extra -d '%s://%s'" % (eid, self.dbDriverName, self.dbAddress)
+        cmd = "/home/suporte/seiscomp3/bin/seiscomp exec scbulletin -E %s -3 --extra -d '%s://%s'" % (eid, self.dbDriverName, self.dbAddress)
         out = commands.getstatusoutput(cmd)
 
         out_lines = out[1]
@@ -188,7 +207,6 @@ class Events(object):
                  t = out_lines,
                  )
         return r
-
 
 #    def _createQuery(self):
 #        # Get global plugin registry

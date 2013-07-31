@@ -1,0 +1,112 @@
+<html xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      py:strip="">
+
+<py:def function="station_availability">
+    <div id="seiNao" width="600px">
+
+    <link rel="stylesheet" type="text/css" href="${url('/')}js/cal-heatmap.css" media="screen" />
+
+    <script src="${url('/')}js/d3.min.js"></script>
+    <script src="${url('/')}js/cal-heatmap.min.js"></script>
+
+    <script type="text/javascript" src="${url('/')}js/jquery.js"></script>
+
+    <h2>Disponibilidade de Dados:</h2>
+
+    <h3>HHZ</h3>
+    <div id="HHZ"></div>
+<!--important comment-->
+
+    <script type="text/javascript">
+        //<![CDATA[
+        var gaps_Z = "${url('/')}getGapsDaily.json?t0=${d.details[0]['t0']}&tf=${d.details[0]['tf']}&d=1&dt=day&s=${d.details[0]['SSSSS']}&c=HHZ";
+
+        $.getJSON(gaps_Z, function(data) {
+            var calZ = new CalHeatMap();
+            gaps = $.parseJSON(data["gaps"]);
+            calZ.init(
+                    {   id: "HHZ",
+                        data: gaps,
+                        start: new Date(2011,0),
+                        //end:   new Date(2014,0),
+                        domain: "year",
+                        subDomain: "day",
+                        range: 5,
+                        browsing: true,
+                        //domainGutter: 2,
+                        cellsize:5,
+                        scale: [0, 5, 10, 30, 50, 70, 90, 95],
+                        itemName: ["% gap", "% gaps"]
+                    }
+            );
+        });
+        //]]>
+    </script>
+
+
+
+    <h3>HHN</h3>
+    <div id="HHN"></div>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        var gaps_N= "${url('/')}getGapsDaily.json?t0=${d.details[0]['t0']}&tf=${d.details[0]['tf']}&d=1&dt=day&s=${d.details[0]['SSSSS']}&c=HHN";
+
+        $.getJSON(gaps_N, function(data) {
+            var calN = new CalHeatMap();
+            gaps = $.parseJSON(data["gaps"]);
+            calN.init(
+                    {   id: "HHN",
+                        data: gaps,
+                        start: new Date(2011,0),
+                        //end:   new Date(2014,0),
+                        domain: "year",
+                        subDomain: "day",
+                        range: 5,
+                        browsing: true,
+                        //domainGutter: 2,
+                        cellsize: 5,
+                        scale: [0, 5, 10, 30, 50, 70, 90, 95],
+                        itemName: ["gap", "gaps"]
+                    }
+            );
+        });
+        //]]>
+    </script>
+
+
+    <h3>HHE</h3>
+    <div id="HHE"></div>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        var gaps_E = "${url('/')}getGapsDaily.json?t0=${d.details[0]['t0']}&tf=${d.details[0]['tf']}&d=1&dt=day&s=${d.details[0]['SSSSS']}&c=HHE";
+
+        $.getJSON(gaps_E, function(data) {
+            var calE = new CalHeatMap();
+            gaps = $.parseJSON(data["gaps"]);
+            calE.init(
+                    {   id: "HHE",
+                        data: gaps,
+                        start: new Date(2011,0),
+                        //end:   new Date(2014,0),
+                        domain: "year",
+                        subDomain: "day",
+                        range: 5,
+                        browsing: true,
+                        //domainGutter: 2,
+                        cellsize: 5,
+                        scale: [0, 5, 10, 30, 50, 70, 90, 95],
+                        itemName: ["% gap", "% gaps"]
+                    }
+            );
+        });
+        //]]>
+    </script>
+
+</div>
+
+</py:def>
+
+</html>

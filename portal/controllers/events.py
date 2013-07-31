@@ -11,26 +11,20 @@ from itertools import cycle
 __all__ = ['EventsController']
 
 import tw2.core as twc
-import tw2.forms as twf
-import tw2.dynforms as twd
-import tw2.jqplugins.ui as jqui
+#import tw2.forms as twf
+#import tw2.dynforms as twd
+#import tw2.jqplugins.ui as jqui
 from datetime import datetime
 
-from eventsForms import EventFilterForm
+#from eventsForms import EventFilterForm
 import eventsForms as ef
+import bsbForms as bf
 
-class Event_Page(twc.Page):
-    title = "page"
-    child = ef.EventFilterForm()
-    
-
+#class Event_Page(twc.Page):
+#    title = "page"
+#    child = ef.EventFilterForm()    
 
 class EventsController(BaseController):
-
-    @expose()
-    def filter(self, **kw):
-        return str(kw)
-
 
     @expose('portal.templates.events')
     def index(self, *args, **kw):
@@ -70,19 +64,61 @@ class EventsController(BaseController):
                         e.e = datetime.strptime(v, "%d-%m-%Y %H:%M")
                 
         event_list = e.getAll(filter=filter)
-        json = e.getAllJson()
-        json_l = e.getLastJson()
-
-       
+        geojson = e.getAllGeoJson()
+        geojson_l = e.getLastGeoJson()
         f = ef.EventFilterForm().req()
-        
-        return dict(page = 'events', 
+
+        b = model.bsb.BoletimSismico()
+
+        bsb_filter = ""
+        bsb_dat = {}
+        if kw != {}:
+            for k, v in kw.iteritems():
+                bsb_dat[k]=v
+                if v != '':
+                    if k == "bsb_mag_f":
+                        bsb_filter += " AND    m_magnitude_value >= %f  " % (float(v))
+                    elif k == "bsb_mag_t":
+                        bsb_filter += " AND    m_magnitude_value <= %f  " % (float(v))
+
+                    elif k == "bsb_dep_f":
+                        bsb_filter += " AND    m_depth_value >= %f  " % (float(v))
+                    elif k == "bsb_dep_t":
+                        bsb_filter += " AND    m_depth_value <= %f  " % (float(v))
+
+                    elif k == "bsb_lat_f":
+                        bsb_filter += " AND    m_latitude_value <= %f  " % (float(v))
+                    elif k == "bsb_lat_t":
+                        bsb_filter += " AND    m_latitude_value <= %f  " % (float(v))
+
+                    elif k == "bsb_lon_f":
+                        bsb_filter += " AND    m_longitude_value <= %f  " % (float(v))
+                    elif k == "bsb_lon_t":
+                        bsb_filter += " AND    m_longitude_value <= %f  " % (float(v))
+
+                    elif k == "bsb_date_f":
+                        b.b = datetime.strptime(v, "%d-%m-%Y %H:%M")
+                    elif k == "bsb_date_t":
+                        b.e = datetime.strptime(v, "%d-%m-%Y %H:%M")
+
+
+        bsb_list = b.getAll(limit=60, filter=bsb_filter)
+        geojson_l = b.getAllGeoJson(limit=60)
+
+        bsb_f = bf.BsbFilterForm().req()
+
+        return dict(page = 'events',
                     filterForm = f,
+                    bsbFilterForm = bsb_f,
                     data = dat,
+                    bsb_data = bsb_dat,
                     events = event_list,
+                    bsb = bsb_list,
                     cycle = cycle,
-                    json = json,
-                    json_l = json_l
+                    geojson = geojson,
+                    geojson_l = geojson_l,
+                    evt_png = url("/images/event.png"),
+                    last_evt_png = url("/images/star2.png"),
                     )
     
     @expose('portal.templates.events')
@@ -90,17 +126,27 @@ class EventsController(BaseController):
         """Handle the events page."""
         e = model.events.Events()
         event_list = e.getAll()
-        json = e.getAllJson()
-        json_l = e.getLastJson()
+        geojson = e.getAllGeoJson()
+        #geojson_l = e.getLastGeoJson()
+        #json_l = e.getLastJson()
 
-        
-        f = EventFilterForm().req()
-        return dict(page='events', 
+        b = model.bsb.BoletimSismico()
+        bsb_list = b.getAll()
+        geojson_l = b.getLastGeoJson()
+
+        f = ef.EventFilterForm().req()
+        bsb_f = bf.BsbFilterForm().req()
+
+        return dict(page='events',
                     filterForm = f,
+                    bsbFilterForm = bsb_f,
                     events = event_list,
+                    bsb = bsb_list,
                     cycle = cycle,
-                    json = json,
-                    json_l = json_l
+                    geojson = geojson,
+                    geojson_l = geojson_l,
+                    evt_png = url("/images/event.png"),
+                    last_evt_png = url("/images/star2.png"),
                     )
 
     @expose('portal.templates.event')
@@ -108,9 +154,10 @@ class EventsController(BaseController):
         id = came_from
         event_details = model.events.Events().getDetails(id)
 
-        f = EventFilterForm().req()
-        
+        f = ef.EventFilterForm().req()
+        bsb_f = bf.BsbFilterForm().req()
+
         return dict(page='event',
                     filterForm=f,
+                    bsbFilterForm= bsb_f,
                     d = event_details)
-        
