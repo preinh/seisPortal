@@ -181,7 +181,7 @@ class BoletimSismico(object):
 #            return r
 
 
-        cmd = "/usr/local/bin/scbulletin -E %s -3 --extra -d '%s://%s'" % (eid, self.dbDriverName, self.dbAddress)
+        cmd = "/home/suporte/seiscomp3/bin/seiscomp exec scbulletin -E %s -3 --extra -d '%s://%s'" % (eid, self.dbDriverName, self.dbAddress)
         out = commands.getstatusoutput(cmd)
 
         out_lines = out[1]
