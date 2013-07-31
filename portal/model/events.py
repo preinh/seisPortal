@@ -29,7 +29,7 @@ class Events(object):
             self.dbPlugin = "dbpostgresql"
         else:
             self.dbDriverName="postgresql"
-            self.dbAddress="sysop:sysop@10.110.0.130/sc_master"
+            self.dbAddress="sysop:sysop@10.110.0.130/master_sc3"
             self.dbPlugin = "dbpostgresql"
         
         daysBefore = 20
@@ -45,7 +45,7 @@ class Events(object):
         self.events_list = []
         
         # Connect to an existing database
-        conn = psycopg2.connect(dbname="sc_master", user="sysop", password="sysop", host="10.110.0.130")
+        conn = psycopg2.connect(dbname="master_sc3", user="sysop", password="sysop", host="10.110.0.130")
         
         # Open a cursor to perform database operations
         cur = conn.cursor()
@@ -61,7 +61,7 @@ class Events(object):
                         origin.m_depth_value AS depth,
                         magnitude.m_magnitude_value AS mag, 
                         magnitude.m_type AS mag_type, 
-                        magnitude.m_stationcount AS mag_count,
+                        coalesce(magnitude.m_stationcount, 0) AS mag_count,
                         case
                             when origin.m_evaluationmode = 'automatic' then 'A'
                             when origin.m_evaluationmode = 'manual' then 'M'

@@ -29,7 +29,7 @@ class BoletimSismico(object):
             self.dbPlugin = "dbpostgresql"
         else:
             self.dbDriverName="postgresql"
-            self.dbAddress="sysop:sysop@10.110.0.130/sc_master"
+            self.dbAddress="sysop:sysop@10.110.0.130/master_sc3"
             self.dbPlugin = "dbpostgresql"
         
         before = 3*365*100
@@ -45,7 +45,7 @@ class BoletimSismico(object):
         self.events_list = []
         
         # Connect to an existing database
-        conn = psycopg2.connect(dbname="sc_master", user="sysop", password="sysop", host="10.110.0.130")
+        conn = psycopg2.connect(dbname="master_sc3", user="sysop", password="sysop", host="10.110.0.130")
         
         # Open a cursor to perform database operations
         cur = conn.cursor()
@@ -61,7 +61,7 @@ class BoletimSismico(object):
                         m_depth_value AS depth,
                         m_magnitude_value AS mag,
                         m_type AS mag_type,
-                        m_stationcount AS mag_count,
+                        coalesce(m_stationcount,0) AS mag_count,
                         m_evaluationmode AS status,
                         author
             FROM        gis_bsb_mv
@@ -85,6 +85,7 @@ class BoletimSismico(object):
             stc = line[9]
             status = line[10]
             author = line[11]
+
             try:
                 _mag = ("%.1f %s (%d)") % (val, typ, stc)
             except:
