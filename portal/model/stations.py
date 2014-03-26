@@ -16,7 +16,7 @@ class Stations(object):
         self.stations_list = []
         
         # Connect to an existing database
-        conn = psycopg2.connect(dbname="request_sc3", user="sysop", password="sysop", host="10.110.0.130")
+        conn = psycopg2.connect(dbname="seisrequest_v7", user="sysop", password="sysop", host="10.110.0.130")
         
         # Open a cursor to perform database operations
         cur = conn.cursor()
@@ -105,7 +105,7 @@ class Stations(object):
             return r
 
         # Connect to an existing database
-        conn = psycopg2.connect(dbname="request_sc3", user="sysop", password="sysop", host="10.110.0.130")
+        conn = psycopg2.connect(dbname="seisrequest_v7", user="sysop", password="sysop", host="10.110.0.130")
         
         # Open a cursor to perform database operations
         cur = conn.cursor()
