@@ -8,7 +8,7 @@
 
 <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" py:if="False"/>
-    <title>Sismologia-IAG-USP</title>
+    <title>Sismologia-USP</title>
 
     <link rel="stylesheet" href="${url('/')}js/leaflet.css" />
     <script src="${url('/')}js/leaflet.js"></script>
@@ -41,10 +41,91 @@
         <tr>
             <td valign="top">
 
-                <h1>Centro de Sismologia (IAG / IEE - USP)</h1>
+                <!--  <h1>Centro de Sismologia - USP</h1> -->
+
+                <h3>Boletim Sísmico Brasileiro</h3>
+                <table>
+                    <tr>
+                        <td>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                <a href="${tg.url('/events')}">
+                                    <img style="width: 200px;float: left; padding: 4px;" src="${url('/images')}/sismos.jpg" alt=""/>
+                                </a>
+                                <big>
+                                    Atualmente o Centro de Sismologia da USP
+                                    utiliza sistemas de detecção automática de tremores de terra,
+                                    somado à experiência de seus analistas, no refinamento e melhoria dos
+                                    resultados automáticos.
+                                    <br/><br/>
+                                    Você encontra <a href="${tg.url('/events')}">aqui</a> informações atualizadas
+                                    continuamente
+                                    sobre os tremores de terra registrados no Brasil e os maiores da America Latina.
+                                    <br/><br/>
+									E <a href="${tg.url('/events#catalog')}">aqui</a> estão os diferentes catálogos
+									compilados em agosto de 2013 com explicações para <i>download</i> 
+									e uma animação com a sequência de ocorrência dos eventos entre 1960-2013.
+                                </big>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
 
 
-                <table style='background-color:#64c4d0;' cellpadding="0" cellspacing="0">
+                <h3>Estações Sismográficas</h3>
+
+                <table>
+                    <tr>
+                        <td valign="top">
+                        </td>
+                        <td>
+                            <p>
+                                <a href="${tg.url('/stations')}">
+                                    <img style="width: 200px; float: right; padding: 4px;" src="${url('/images')}/stations.jpg" alt=""/>
+                                </a>
+                                <big>
+                                    O Centro de Sismologia da Universidade de São Paulo, originado pela parceria
+                                    entre o Instituto de Astronomia, Geofísica e Ciências Atmosféricas (IAG) e o
+                                    Instituto de Energia e Ambiente (IEE),
+                                    mantém a parte Sul e Sudeste (correspondente à rede BRASIS) da Rede Sismográfica Brasileira em
+                                    conjunto com outros experimentos sismológicos temporários e estudos regionais.
+                                    <br/><br/>
+                                    Todos os dados adquiridos nas operações do Centro, bem como
+                                    parte do controle de qualidade se encontra disponível <a href="${tg.url('/stations')}">aqui</a>.
+                                </big>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+                <h3>Sismogramas</h3>
+                <table>
+                    <tr valign="top">
+                        <td>
+                        </td>
+                        <td>
+                            <p>
+                                <a href="${tg.url('/waveform')}">
+                                    <img style="width: 150px;float: left; padding: 4px;" src="${url('/images')}/waveform.jpg" alt=""/>
+                                </a>
+                                <big>
+                                    O Centro de Sismologia da USP,
+                                    adquiriu dados sismológicos na maior parte do Brasil,
+                                    prezando enormemente pela qualidade das instalações.
+                                    <br/><br/>
+                                    Todos os dados sismológicos sob os cuidados do Centro de Sismologia da USP,
+                                    podem ser solicitados diretamente <a href="${tg.url('/waveform')}">aqui</a>.
+                                </big>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+				<br/><br/>
+
+                <!-- <table style='background-color:#64c4d0;' cellpadding="0" cellspacing="0">  -->
+                <table cellpadding="0" cellspacing="0">
                     <tr style="background-color: #fcb421; color:#000000; height: 10px;"><td>
                         <h2 >&nbsp;Informe: Sismicidade em Montes Claros, MG</h2>
                     </td></tr>
@@ -84,98 +165,16 @@
                     </tr>
                 </table>
 
-
-
-                <h3>Boletim Sísmico Brasileiro</h3>
-                <table>
-                    <tr>
-                        <td>
-                        </td>
-                        <td valign="top">
-                            <p>
-                                <a href="${tg.url('/events')}">
-                                    <img style="width: 200px;float: right; padding: 4px;" src="${url('/images')}/sismos.jpg" alt=""/>
-                                </a>
-                                <big>
-                                    Atualmente, o Centro de Sismologia da USP
-                                    conta com sistemas de detecção automática de tremores de terra de última geração,
-                                    alem da experiencia de seus analistas, no refinamento e melhoria dos
-                                    resultados automáticos.
-                                    <br/><br/>
-                                    Voce encontra <a href="${tg.url('/events')}">aqui</a> informaçõees atualizadas
-                                    continuamente
-                                    sobre os tremores de terra registrados no Brasil e os maiores da America Latina.
-                                </big>
-                            </p>
-                        </td>
-                    </tr>
-                </table>
-
-
-
-                <h3>Estações Sismográficas</h3>
-
-                <table>
-                    <tr>
-                        <td valign="top">
-                        </td>
-                        <td>
-                            <p>
-                                <a href="${tg.url('/stations')}">
-                                    <img style="width: 200px; float: left; padding: 4px;" src="${url('/images')}/stations.jpg" alt=""/>
-                                </a>
-                                <big>
-                                    O Centro de Sismologia da Universidade de São Paulo, originado pela parceria
-                                    entre o Instiuto de Astronomia, Geofísica e Ciências Atmosféricas (IAG) e o
-                                    Institudo de Eletrotécnica e Energia (IEE),
-                                    mantem a parte Sul e Sudeste da Rede Sismográfica Integrada do Brasil - BRASIS - em
-                                    conjunto com outros experimentos sismológicos temporários, ou experimentos de estudos
-                                    regionais.
-                                    <br/><br/>
-                                    Todos os dados adquiridos nas operações do Centro, bem bomo
-                                    parte do controle de qualidade se encontra disponível <a href="${tg.url('/stations')}">aqui</a>.
-                                </big>
-                            </p>
-                        </td>
-                    </tr>
-                </table>
-
-                <h3>Sismogramas</h3>
-                <table>
-                    <tr valign="top">
-                        <td>
-                        </td>
-                        <td>
-                            <p>
-                                <a href="${tg.url('/waveform')}">
-                                    <img style="width: 150px;float: right; padding: 4px;" src="${url('/images')}/waveform.jpg" alt=""/>
-                                </a>
-                                <big>
-                                    O Centro de Sismologia da USP,
-                                    adquiriu dados sismologicos na maior parte do Brasil,
-                                    prezando enormemente pela qualidade das instalacoes.<br/><br/>
-
-                                    Todos os dados sismológicos sob os cuidados do Centro de Sismologia da USP,
-                                    podem ser solicitados diretamente <a href="${tg.url('/waveform')}">aqui</a>.
-                                </big>
-                            </p>
-                        </td>
-                    </tr>
-                </table>
-
-
             </td>
 
             <td width="40%" valign="top">
                 ${events_bsb()}
 
                 ${events_world()}
-
             </td>
 
         </tr>
     </table>
-
 
     <br/><br/>
 
