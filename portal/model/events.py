@@ -148,7 +148,7 @@ class Events(object):
                     }
                 }, """%(d['id'],  d['mag'], d['desc'],d['time'], float(str(d['lon'])), float(str(d['lat'])))
 
-            geojson = "var geojson = [" + geojson[ : -1] + "];"
+            geojson = "var geojson = [" + geojson[:] + "];"
         except:
             print geojson
             pass
@@ -176,7 +176,7 @@ class Events(object):
                 },
                 """%(d['id'],  d['mag'], d['desc'],d['time'], float(str(d['lon'])), float(str(d['lat'])))
 
-            json = "var geojson_l = [" + json[ : -1] + "];"
+            json = "var geojson_l = [" + json[:] + "];"
         except:
             json = "var geojson_l = [ ];"
             print json

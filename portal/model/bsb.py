@@ -136,7 +136,7 @@ class BoletimSismico(object):
                 },
                 """ % (d['id'], d['mag'], d['desc'], d['time'], float(str(d['lon'])), float(str(d['lat'])))
 
-            json = "var geojson_bsb = [" + json[ : -1] + "];"
+            json = "var geojson_bsb = [" + json[:] + "];"
         except:
             print "Unexpected error:", sys.exc_info()[0]
             json = "var geojson_bsb = [ ];"
@@ -164,7 +164,7 @@ class BoletimSismico(object):
                 },
                 """%(d['id'], d['mag'], d['desc'],d['time'], float(str(d['lon'])), float(str(d['lat'])))
 
-            json = "var geojson_bsb_l = [" + json[ : -1] + "];"
+            json = "var geojson_bsb_l = [" + json[:] + "];"
         except:
             print d['id'],  d['mag'], d['desc'],d['time'], float(str(d['lon'])), float(str(d['lat']))
             json = "var geojson_bsb_l = [ ];"
