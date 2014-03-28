@@ -119,7 +119,7 @@ class BoletimSismico(object):
     def getAllGeoJson(self, limit=None):
         json=""
         try:
-            for d in self.events_list[1:limit]:
+            for d in self.events_list[0:limit]:
                 json += """
                  {
                     "type": "Feature",

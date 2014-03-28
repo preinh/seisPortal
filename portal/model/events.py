@@ -132,7 +132,7 @@ class Events(object):
     def getAllGeoJson(self, limit=None):
         geojson=""
         try:
-            for d in self.events_list[1:limit]:
+            for d in self.events_list[0:limit]:
                 geojson+= """
                 {
                     "type": "Feature",
