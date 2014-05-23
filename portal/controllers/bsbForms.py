@@ -91,7 +91,7 @@ class BsbFilterForm(twf.Form):
                                             'range': True,
                                             'min' : -90,
                                             'max' : 90,
-                                            'step' : 0.01,
+                                            'step' : 10.0,
                                             'values' : [-35, 6],
                                                      },
                                             events={
@@ -103,7 +103,7 @@ class BsbFilterForm(twf.Form):
                                                             }
                                                             """,
                                                     })
-            bsb_lblLat = twf.TextField(label=None, size=10, attrs={'style': "border: 0;", 'readonly':'readonly'})
+            bsb_lblLat = twf.TextField(label=None, size=15, attrs={'style': "border: 0;", 'readonly':'readonly'})
         
         class bsb_lon(twf.ListLayout):
             id = None
@@ -116,7 +116,7 @@ class BsbFilterForm(twf.Form):
                                             'range': True,
                                             'min' : -180,
                                             'max' : 180,
-                                            'step' : 0.01,
+                                            'step' : 10.0,
                                             'values' : [-90, -35],
                                                      },
                                             events={
@@ -128,7 +128,7 @@ class BsbFilterForm(twf.Form):
                                                             }
                                                             """,
                                                     })
-            bsb_lblLon = twf.TextField(label=None,  size=10, attrs={'style': "border: 0;", 'readonly':'readonly'})
+            bsb_lblLon = twf.TextField(label=None,  size=15, attrs={'style': "border: 0;", 'readonly':'readonly'})
 
         class bsb_dep(twf.ListLayout):
             id=None
@@ -140,8 +140,8 @@ class BsbFilterForm(twf.Form):
                                             options={
                                             'range': True,
                                             'min' : 0,
-                                            'max' : 6500,
-                                            'step' : 1.0,
+                                            'max' : 800,
+                                            'step' : 5.0,
                                             'values' : [0, 800],
                                                      },
                                             events={
@@ -153,7 +153,7 @@ class BsbFilterForm(twf.Form):
                                                             }
                                                             """,
                                                     })
-            bsb_lblDep = twf.TextField(label=None, size=10, attrs={'style': "border: 0;", 'readonly':'readonly'})
+            bsb_lblDep = twf.TextField(label=None, size=15, attrs={'style': "border: 0;", 'readonly':'readonly'})
         
         class bsb_mag(twf.ListLayout):
             id=None
@@ -165,8 +165,8 @@ class BsbFilterForm(twf.Form):
                                             options={
                                             'range': True,
                                             'min' : -5,
-                                            'max' : 12,
-                                            'step' : 0.01,
+                                            'max' : 10,
+                                            'step' : 0.5,
                                             'values' : [0, 10],
                                                      },
                                             events={
@@ -178,7 +178,7 @@ class BsbFilterForm(twf.Form):
                                                             }
                                                             """,
                                                     })
-            bsb_lblMag = twf.TextField(label=None, size=10, attrs={'style': "border: 0;", 'readonly':'readonly'})
+            bsb_lblMag = twf.TextField(label=None, size=15, attrs={'style': "border: 0;", 'readonly':'readonly'})
 
         class bsb_do(twf.SubmitButton):
             value="Filtrar"
