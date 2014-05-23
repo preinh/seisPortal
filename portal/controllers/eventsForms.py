@@ -87,7 +87,7 @@ class EventFilterForm(twf.Form):
                                             'range': True,
                                             'min' : -90,
                                             'max' : 90,
-                                            'step' : 0.01,
+                                            'step' : 10,
                                             'values' : [-35, 6],
                                                      },
                                             events={
@@ -99,7 +99,7 @@ class EventFilterForm(twf.Form):
                                                             }
                                                             """,
                                                     })
-            lblLat = twf.TextField(label=None, size=10, attrs={'style': "border: 0;", 'readonly':'readonly'})
+            lblLat = twf.TextField(label=None, size=15, attrs={'style': "border: 0;", 'readonly':'readonly'})
         
         class lon(twf.ListLayout):
             id = None
@@ -110,7 +110,7 @@ class EventFilterForm(twf.Form):
                                             'range': True,
                                             'min' : -180,
                                             'max' : 180,
-                                            'step' : 0.01,
+                                            'step' : 10,
                                             'values' : [-90, -35],
                                                      },
                                             events={
@@ -122,7 +122,7 @@ class EventFilterForm(twf.Form):
                                                             }
                                                             """,
                                                     })
-            lblLon = twf.TextField(label=None,  size=10, attrs={'style': "border: 0;", 'readonly':'readonly'})
+            lblLon = twf.TextField(label=None,  size=15, attrs={'style': "border: 0;", 'readonly':'readonly'})
 
         class dep(twf.ListLayout):
             id=None
@@ -132,8 +132,8 @@ class EventFilterForm(twf.Form):
                                             options={
                                             'range': True,
                                             'min' : 0,
-                                            'max' : 6500,
-                                            'step' : 1.0,
+                                            'max' : 800,
+                                            'step' : 15.0,
                                             'values' : [0, 800],
                                                      },
                                             events={
@@ -145,7 +145,7 @@ class EventFilterForm(twf.Form):
                                                             }
                                                             """,
                                                     })
-            lblDep = twf.TextField(label=None, size=10, attrs={'style': "border: 0;", 'readonly':'readonly'})
+            lblDep = twf.TextField(label=None, size=15, attrs={'style': "border: 0;", 'readonly':'readonly'})
         
         class mag(twf.ListLayout):
             id=None
@@ -154,9 +154,9 @@ class EventFilterForm(twf.Form):
             mag = jqui.widgets.SliderWidget("magnitude",
                                             options={
                                             'range': True,
-                                            'min' : -5,
-                                            'max' : 12,
-                                            'step' : 0.01,
+                                            'min' : -3,
+                                            'max' : 10,
+                                            'step' : 0.5,
                                             'values' : [0, 10],
                                                      },
                                             events={
@@ -168,7 +168,7 @@ class EventFilterForm(twf.Form):
                                                             }
                                                             """,
                                                     })
-            lblMag = twf.TextField(label=None, size=10, attrs={'style': "border: 0;", 'readonly':'readonly'})
+            lblMag = twf.TextField(label=None, size=15, attrs={'style': "border: 0;", 'readonly':'readonly'})
 
         class do(twf.SubmitButton):
             value="Filtrar"

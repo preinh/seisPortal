@@ -49,12 +49,12 @@ class EventsController(BaseController):
                         filter += " AND     origin.m_depth_value <= %f  " % (float(v))
 
                     elif k == "lat_f":
-                        filter += " AND     origin.m_latitude_value <= %f  " % (float(v))
+                        filter += " AND     origin.m_latitude_value >= %f  " % (float(v))
                     elif k == "lat_t":
                         filter += " AND     origin.m_latitude_value <= %f  " % (float(v))
                 
                     elif k == "lon_f":
-                        filter += " AND     origin.m_longitude_value <= %f  " % (float(v))
+                        filter += " AND     origin.m_longitude_value >= %f  " % (float(v))
                     elif k == "lon_t":
                         filter += " AND     origin.m_longitude_value <= %f  " % (float(v))
                 
@@ -87,12 +87,12 @@ class EventsController(BaseController):
                         bsb_filter += " AND    m_depth_value <= %f  " % (float(v))
 
                     elif k == "bsb_lat_f":
-                        bsb_filter += " AND    m_latitude_value <= %f  " % (float(v))
+                        bsb_filter += " AND    m_latitude_value >= %f  " % (float(v))
                     elif k == "bsb_lat_t":
                         bsb_filter += " AND    m_latitude_value <= %f  " % (float(v))
 
                     elif k == "bsb_lon_f":
-                        bsb_filter += " AND    m_longitude_value <= %f  " % (float(v))
+                        bsb_filter += " AND    m_longitude_value >= %f  " % (float(v))
                     elif k == "bsb_lon_t":
                         bsb_filter += " AND    m_longitude_value <= %f  " % (float(v))
 
