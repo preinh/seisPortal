@@ -8,7 +8,7 @@ import tw2.jqplugins.ui as jqui
 
 class EventFilterForm(twf.Form):
     submit = None
-    action = None
+    action = "events#wec"
     class child(twf.RowLayout):
         repetition = 1
     

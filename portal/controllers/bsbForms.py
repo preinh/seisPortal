@@ -8,7 +8,7 @@ import tw2.jqplugins.ui as jqui
 
 class BsbFilterForm(twf.Form):
     submit = None
-    action = None
+    action = "events#bsb"
 
 
     class child(twf.RowLayout):
