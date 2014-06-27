@@ -547,13 +547,18 @@ class RootController(BaseController):
 
     @expose('portal.templates.google')
     def google(self):
-        """Handle the 'about' page."""
+        """Handle google data backend."""
         return dict(page='google')
 
 
     @expose('portal.templates.about')
     def about(self, *args, **kw):
         return dict(page='about')
+
+
+    @expose('portal.templates.disclaimer')
+    def disclaimer(self, *args, **kw):
+        return dict(page='disclaimer')
 
 
     @expose('portal.templates.environ')
